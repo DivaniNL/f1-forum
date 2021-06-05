@@ -101,7 +101,7 @@ if(isset($_POST['login'])){
             'Username'=> "'".$row_auth_normaluser_login["username"]."'",
             'Firstname'=> "'".$row_auth_normaluser_login["firstname"]."'",
             'Lastname'=> "'".$row_auth_normaluser_login["lastname"]."'",
-            'Admin'=> "'".$row_auth_normaluser_login["admin"]."'",
+            'Admin'=> "".$row_auth_normaluser_login["admin"]."",
             );
             if($_SESSION['user']["Admin"] == 1){
                 $_SESSION['user']['logged_in_as'] = "admin";
@@ -110,11 +110,58 @@ if(isset($_POST['login'])){
             }
             var_dump( $_SESSION['user']);
             //redirects you to the home page after logging in
-            // header("Location: index.php");            
+            header("Location: index.php");            
         } else {
         $error .=  'Invalid password.';
         }
     }
+}
+
+
+
+//adding category
+if(isset($_POST['addcat'])){
+    //getting the category name from the form input
+    $category_name = mysqli_real_escape_string($conn, $_POST['category']);
+    //query to check if there is already a category with this name
+    $sql_check_existing_category = "SELECT * FROM categories WHERE title = '".$category_name."'";
+    $result_check_existing_category = $conn->query($sql_check_existing_category);
+    //check if there is no category with this name
+    if($result_check_existing_category->num_rows < 1 ){
+        //making the query to fill the category table
+        $sql_insert_category = "INSERT INTO `categories`(title) VALUES('$category_name')";
+        //if the record was saved
+        if($result_insert_category = $conn->query($sql_insert_category)){
+            echo "category added";
+        }else{
+            $error .=  "Er is iets misgegaan: Errorcode[120]";
+            fwrite('logs.txt', $sql_insert_category);
+        }
+        
+    }else{
+        $error .=  "Er is iets misgegaan: Errorcode[121]";
+        fwrite('logs.txt', $sql_insert_category);
+    }
+
+
+}
+//checking if you are on the admin access
+
+//
+if($_SESSION['user']['logged_in_as'] == "admin" && $_SESSION['admin_page'] == 'home'){
+    //setting the categories value to blank
+    $categories = "";
+    //query to get all categories from the database
+    $sql_get_categories_from_db = "SELECT * FROM categories";
+    $result_get_categories_from_db = $conn->query($sql_get_categories_from_db);
+    //loop through all the categories and show all current categories
+    while($row_get_categories_from_db = $result_get_categories_from_db->fetch_assoc()){
+        //Fill the categories variable
+        $categories .= "<div>".$row_get_categories_from_db['title']."</div>";
+
+        //HERE WILL COME ANOTHER LOOP FOR ALL THE SUBCATEGORIES
+    }
+    
 }
 ?>
 <!-- The script below makes sure a form is not submitted when reloading a page -->
