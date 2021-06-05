@@ -1,9 +1,10 @@
 
 <?php
-include "conn/conn.php";
-if(!isset($_SESSION['logged-in'])){ //if login in session is not set
+include "handler.php";
+if(!isset($_SESSION['user'])){ //if login in session is not set
     header("Location: login.php");
 }
+var_dump($_SESSION['user']);
 ?>
 
 <!DOCTYPE html>

@@ -82,7 +82,7 @@ if(isset($_POST['login'])){
     $post_login_password = mysqli_real_escape_string($conn, $_POST['login_password']);
     //getting password from db
     //get all users from the db with either the same username or the same email-adress as entered in the input field
-    $sql_auth_normaluser_login = "SELECT users.id, users.username, credentials.user_id, credentials.email, credentials.password FROM users INNER JOIN credentials ON credentials.user_id = users.id WHERE credentials.email = '".$post_login_username_email."' OR users.username = '".$post_login_username_email."'";
+    $sql_auth_normaluser_login = "SELECT users.id, users.username, users.firstname, users.lastname, users.admin, credentials.user_id, credentials.email, credentials.password FROM users INNER JOIN credentials ON credentials.user_id = users.id WHERE credentials.email = '".$post_login_username_email."' OR users.username = '".$post_login_username_email."'";
     $result_auth_normaluser_login = $conn->query($sql_auth_normaluser_login);
     //checks if there are users with the email-adress or username entered in the inputfield
     if($result_auth_normaluser_login->num_rows < 1 ){
@@ -94,9 +94,23 @@ if(isset($_POST['login'])){
         if (password_verify($post_login_password, $row_auth_normaluser_login['password'])) {
             //log in successful
             //sets session variable
-            $_SESSION['logged-in'] = true;
+
+            $_SESSION['user'] = array(
+                
+            'ID'=> "'".$row_auth_normaluser_login["id"]."'",
+            'Username'=> "'".$row_auth_normaluser_login["username"]."'",
+            'Firstname'=> "'".$row_auth_normaluser_login["firstname"]."'",
+            'Lastname'=> "'".$row_auth_normaluser_login["lastname"]."'",
+            'Admin'=> "'".$row_auth_normaluser_login["admin"]."'",
+            );
+            if($_SESSION['user']["Admin"] == 1){
+                $_SESSION['user']['logged_in_as'] = "admin";
+            }elseif ($_SESSION['user']["Admin"] == 0) {
+                $_SESSION['user']['logged_in_as'] = "client";
+            }
+            var_dump( $_SESSION['user']);
             //redirects you to the home page after logging in
-            header("Location: index.php");            
+            // header("Location: index.php");            
         } else {
         $error .=  'Invalid password.';
         }

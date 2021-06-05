@@ -1,6 +1,6 @@
 <?php
 include 'handler.php';
-if(isset($_SESSION['logged-in'])){ //if login in session is not set
+if(isset($_SESSION['user'])){ //if login in session is not set
     header("Location: index.php");
 }
 ?>
