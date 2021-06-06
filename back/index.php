@@ -29,6 +29,5 @@ if(isset($_SESSION['user'])){
 </head>
 <body>
     Dit Zie je als je ingelogd bent en een admin bent. Aan deze site wordt gewerkt.
-    <?php echo $categories ?>
 </body>
 </html>

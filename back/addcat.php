@@ -9,7 +9,7 @@ if(isset($_SESSION['user'])){
         header("Location: ../index.php");
     }else{
         //stuff happening if you are visiting this page and have admin access
-
+        $_SESSION['admin_page'] = 'addcat';
 
     }
 }else{

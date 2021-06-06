@@ -1,5 +1,10 @@
 <?php
 include 'conn/conn.php';
+?>
+<style>
+<?php include 'assets/css/style.min.css'; ?>
+</style>
+<?php
 //the error variable stores all the errors and displays it in the div "error-container"
 $error = "";
 //registering a user
@@ -108,7 +113,6 @@ if(isset($_POST['login'])){
             }elseif ($_SESSION['user']["Admin"] == 0) {
                 $_SESSION['user']['logged_in_as'] = "client";
             }
-            var_dump( $_SESSION['user']);
             //redirects you to the home page after logging in
             header("Location: index.php");            
         } else {
@@ -122,17 +126,17 @@ if(isset($_POST['login'])){
 //adding category
 if(isset($_POST['addcat'])){
     //getting the category name from the form input
-    $category_name = mysqli_real_escape_string($conn, $_POST['category']);
+    $post_category_name = mysqli_real_escape_string($conn, $_POST['category']);
     //query to check if there is already a category with this name
-    $sql_check_existing_category = "SELECT * FROM categories WHERE title = '".$category_name."'";
+    $sql_check_existing_category = "SELECT * FROM categories WHERE cat_title = '".$post_category_name."'";
     $result_check_existing_category = $conn->query($sql_check_existing_category);
     //check if there is no category with this name
     if($result_check_existing_category->num_rows < 1 ){
         //making the query to fill the category table
-        $sql_insert_category = "INSERT INTO `categories`(title) VALUES('$category_name')";
+        $sql_insert_category = "INSERT INTO `categories`(cat_title) VALUES('$post_category_name')";
         //if the record was saved
         if($result_insert_category = $conn->query($sql_insert_category)){
-            echo "category added";
+            header("Location: index.php");    
         }else{
             $error .=  "Er is iets misgegaan: Errorcode[120]";
             fwrite('logs.txt', $sql_insert_category);
@@ -145,24 +149,86 @@ if(isset($_POST['addcat'])){
 
 
 }
-//checking if you are on the admin access
+if(isset($_POST['addsubcat'])){
 
-//
-if($_SESSION['user']['logged_in_as'] == "admin" && $_SESSION['admin_page'] == 'home'){
-    //setting the categories value to blank
-    $categories = "";
-    //query to get all categories from the database
+//DUMMY: SELECT * FROM CATEGORIES INNER JOIN SUBCATEGORIES WHERE TITLE = CATEGORY NAME
+//GET CATEGORY ID 
+//INSERT INTO SUBCATEGORIES WITH CATEGORY ID
+
+
+    //getting the subcategory name
+    $post_subcategory_name = mysqli_real_escape_string($conn, $_POST['subcategory']);
+    //getting the category that the subcategory must be placed underneath
+    $post_category_name = mysqli_real_escape_string($conn, $_POST['category']);
+    //query to check if there is already a subcategory with this name
+    $sql_check_existing_subcategory = "SELECT * FROM subcategories WHERE subcat_title = '".$post_subcategory_name."'";
+    $result_check_existing_subcategory = $conn->query($sql_check_existing_subcategory);
+    //check if there is no subcategory with this name
+    if($result_check_existing_subcategory->num_rows < 1 ){
+        //query to get all categories with the category name which was chosen in the select attribute of the form.
+        $sql_get_cat_id = "SELECT * FROM categories WHERE cat_title = '".$post_category_name."'";
+        $result_get_cat_id = $conn->query($sql_get_cat_id);
+        $row_get_cat_id = $result_get_cat_id->fetch_assoc();
+        //getting the category id, which can be used to fill in category_id when inserting a subcategory into the database
+        $cat_id = $row_get_cat_id['id'];
+
+        //query to input subcategory into the database
+        $sql_insert_subcategory = "INSERT INTO subcategories(cat_id, subcat_title) VALUES($cat_id, '$post_subcategory_name')";
+        if($result_insert_subcategory = $conn->query($sql_insert_subcategory)){
+            
+
+            header("Location: index.php");    
+        }else{
+            $error .=  "Er is iets misgegaan: Errorcode[122]";
+            fwrite('logs.txt', $sql_insert_category);
+        }
+
+
+    }
+
+
+}
+
+//function to display all the categories and subcategories
+function getCategoryTree($conn) {
+    //sql query to get all the categories
+    $cat_div = "";
     $sql_get_categories_from_db = "SELECT * FROM categories";
     $result_get_categories_from_db = $conn->query($sql_get_categories_from_db);
     //loop through all the categories and show all current categories
+    $cat_div.= "<div class='cats_container'>";
     while($row_get_categories_from_db = $result_get_categories_from_db->fetch_assoc()){
-        //Fill the categories variable
-        $categories .= "<div>".$row_get_categories_from_db['title']."</div>";
-
-        //HERE WILL COME ANOTHER LOOP FOR ALL THE SUBCATEGORIES
+        //Fill the categories variable and display this for every category found
+        $cat_title = $row_get_categories_from_db['cat_title'];
+        $cat_div.= "
+        <div class='cat_container'>
+            <div class='cat_header'>
+                <div class='cat_title_container'>".$cat_title."</div>
+                <div class='subcat_thread_count_head_container'>Threads</div>
+            </div>";
+        //sql query to get all the subcategories
+        $sql_get_subcategories_from_db = "SELECT * FROM categories INNER JOIN subcategories ON subcategories.cat_id = categories.id WHERE categories.cat_title ='".$cat_title."'";
+        $result_get_subcategories_from_db = $conn->query($sql_get_subcategories_from_db);
+        //loop through all the subcategories and show all current subcategories onderneath the categories
+        while($row_get_subcategories_from_db = $result_get_subcategories_from_db->fetch_assoc()){
+            $cat_div.= "
+            <div class = 'subcat_container'>
+                <div class = 'subcat_title_container'>".$row_get_subcategories_from_db['subcat_title']."</div>
+                <div class = 'subcat_thread_count_container'>0</div>
+            </div>";
+        } $cat_div.= '
+        </div>';
     }
-    
+    $cat_div.= "</div><br>";
+    return $cat_div;
 }
+// if($_SESSION['user']['logged_in_as'] == "admin"){
+    //     //setting the json categories value to blank
+    //     $_SESSION['categories'] = [];
+    //     //query to get all categories from the database
+    
+    
+// }
 ?>
 <!-- The script below makes sure a form is not submitted when reloading a page -->
 <script>

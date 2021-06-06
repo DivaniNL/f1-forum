@@ -3,7 +3,59 @@
     padding: 0;
     box-sizing: border-box;
 }
-
-.container_conn{
+.categories_container{
+    //div where the category container will be placed in, some thing can be placed above and under the categories will still be inside this div
     background-color: aquamarine;
+    width: 80%;
+    
+    .cats_container{    
+        //where all thh categories will be nested in   
+        width: 50%;
+        margin: 0 auto;
+        overflow:auto; 
+        
+        .cat_container{
+            //the category box with all the subcategories
+            background-color: black;
+            padding: 5px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            float: left;
+            width: 100%;
+            .cat_header{
+                //the category top row, with the title of the category and a box showing the topic count header
+                color: white;
+                background-color: black;
+                padding: 5px;
+
+                height: 25px;
+                width: 100%;
+                
+                .cat_title_container{
+                    //where the title of the category is
+                    float: left;
+                }
+                .subcat_thread_count_head_container{
+                    //a box showing the topic count header
+                    float: right;
+                }
+            }
+            .subcat_container{
+                //the box of a subcategory, with the title of the subcategory and a box showing the topic count
+                padding: 5px;
+                height: 25px;
+                width: 100%;
+                display: inline-block;
+                background-color: grey;
+                .subcat_title_container{
+                    //where the title of the subcategory is
+                    float: left;
+                }
+                .subcat_thread_count_container{
+                    //a box showing the topic count
+                    float: right;
+                }
+            }
+        }
+    }
 }
