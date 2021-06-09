@@ -10,6 +10,7 @@ $error = "";
 //registering a user
 if(isset($_POST['register'])){
     //getting the post values from the form at register.php
+    ///PREPARED STATEMENTS V2
     $post_username = mysqli_real_escape_string($conn, $_POST['username']);
     $post_firstname = mysqli_real_escape_string($conn, $_POST['firstname']);
     $post_lastname = mysqli_real_escape_string($conn, $_POST['lastname']);
@@ -87,7 +88,7 @@ if(isset($_POST['login'])){
     $post_login_password = mysqli_real_escape_string($conn, $_POST['login_password']);
     //getting password from db
     //get all users from the db with either the same username or the same email-adress as entered in the input field
-    $sql_auth_normaluser_login = "SELECT users.id, users.username, users.firstname, users.lastname, users.admin, credentials.user_id, credentials.email, credentials.password FROM users INNER JOIN credentials ON credentials.user_id = users.id WHERE credentials.email = '".$post_login_username_email."' OR users.username = '".$post_login_username_email."'";
+    $sql_auth_normaluser_login = "SELECT * FROM users INNER JOIN credentials ON credentials.user_id = users.id WHERE credentials.email = '".$post_login_username_email."' OR users.username = '".$post_login_username_email."'";
     $result_auth_normaluser_login = $conn->query($sql_auth_normaluser_login);
     //checks if there are users with the email-adress or username entered in the inputfield
     if($result_auth_normaluser_login->num_rows < 1 ){
@@ -102,11 +103,14 @@ if(isset($_POST['login'])){
 
             $_SESSION['user'] = array(
                 
-            'ID'=> "'".$row_auth_normaluser_login["id"]."'",
-            'Username'=> "'".$row_auth_normaluser_login["username"]."'",
-            'Firstname'=> "'".$row_auth_normaluser_login["firstname"]."'",
-            'Lastname'=> "'".$row_auth_normaluser_login["lastname"]."'",
-            'Admin'=> "".$row_auth_normaluser_login["admin"]."",
+            'ID'=> $row_auth_normaluser_login["user_id"],
+            'Username'=> $row_auth_normaluser_login["username"],
+            'Firstname'=> $row_auth_normaluser_login["firstname"],
+            'Lastname'=> $row_auth_normaluser_login["lastname"],
+            'Admin'=> $row_auth_normaluser_login["admin"],
+            'favourite_driver'=> $row_auth_normaluser_login["favourite_driver"],
+            'date_registered'=> $row_auth_normaluser_login["date_registered"],
+            'threads_count'=> $row_auth_normaluser_login["threads_count"],
             );
             if($_SESSION['user']["Admin"] == 1){
                 $_SESSION['user']['logged_in_as'] = "admin";
@@ -151,9 +155,9 @@ if(isset($_POST['addcat'])){
 }
 if(isset($_POST['addsubcat'])){
 
-//DUMMY: SELECT * FROM CATEGORIES INNER JOIN SUBCATEGORIES WHERE TITLE = CATEGORY NAME
-//GET CATEGORY ID 
-//INSERT INTO SUBCATEGORIES WITH CATEGORY ID
+    //DUMMY: SELECT * FROM CATEGORIES INNER JOIN SUBCATEGORIES WHERE TITLE = CATEGORY NAME
+    //GET CATEGORY ID 
+    //INSERT INTO SUBCATEGORIES WITH CATEGORY ID
 
 
     //getting the subcategory name
@@ -189,6 +193,82 @@ if(isset($_POST['addsubcat'])){
 
 }
 
+
+if(isset($_POST['newthread'])){
+    //getting the post values from the form at addtopic.php
+    ///PREPARED STATEMENTS V2
+    $post_username = mysqli_real_escape_string($conn, $_POST['username']);
+    $post_firstname = mysqli_real_escape_string($conn, $_POST['firstname']);
+    $post_lastname = mysqli_real_escape_string($conn, $_POST['lastname']);
+    $post_favourite_driver = mysqli_real_escape_string($conn, $_POST['favourite_driver']);
+    $post_date_registered = mysqli_real_escape_string($conn, $_POST['date_registered']);
+    $post_threads_count = mysqli_real_escape_string($conn, $_POST['threads_count']);
+    $post_thread_title = mysqli_real_escape_string($conn, $_POST['thread_title']);
+    $post_first_reply = mysqli_real_escape_string($conn, $_POST['first_reply']);
+    $author_id = $_SESSION['user']['ID'];
+    //saves current date for time_created column in the threads table
+    $time_created = date('Y-m-d H:i:s');
+    $sql_check_existing_thread = "SELECT * FROM threads WHERE title = '".$post_thread_title."'";
+    $result_check_existing_thread = $conn->query($sql_check_existing_thread);
+    //check if there is already a thread with the same title
+    if($result_check_existing_thread->num_rows < 1 ){
+        //making the query to fill the threads table
+        $sql_insert_thread_threads = "INSERT INTO `threads`(title, author_id, cat_id, subcat_id, `replies`, views, time_created) VALUES('$post_thread_title', $author_id, $cat_id, $subcat_id,0, 0, '$time_created')";
+        if($result_insert_thread_threads = $conn->query($sql_insert_thread_threads)){
+            //if the threads table is filled                
+            
+            
+            //GET THREAD ID
+            $sql_get_thread_id = "SELECT * FROM threads ORDER BY id DESC LIMIT 1";
+            //do the query
+            $result_get_thread_id = $conn->query($sql_get_thread_id);
+            //get the thread_id and assign it to the variable thread_id
+            $row_get_thread_id = $result_get_thread_id->fetch_assoc();
+            $thread_id = $row_get_thread_id['id'];
+            $sql_insert_thread_replies = "INSERT INTO `replies`(`user_id`, thread_id, date_time, post_body) VALUES($author_id, $thread_id, '$time_created', '$post_first_reply')";
+            if($result_insert_thread_replies = $conn->query($sql_insert_thread_replies)){
+                //if the replies table is filled
+                //Up user topic count by one
+                $sql_update_threads_count = "UPDATE users SET threads_count = threads_count + 1 WHERE id=".$author_id."";
+                echo $sql_update_threads_count;
+                if($result_update_threads_count = $conn->query($sql_update_threads_count)){
+                    //if the thread count is updated in users table
+                    $sql_update_subcat_threads_count = "UPDATE subcategories SET subcat_threads_count = subcat_threads_count + 1 WHERE id=".$subcat_id."";
+                    if($result_update_subcat_threads_count = $conn->query($sql_update_subcat_threads_count)){
+                    //if the thread count is updated in subcategories table
+                    }else{
+                        $error .=  "Er is iets misgegaan: Errorcode[144]";
+                    }
+                    
+                }else{
+                    
+                    //errorcode nog toevoegen
+                    echo $sql_update_threads_count;
+                    $error .=  "Er is iets misgegaan: Errorcode[143]";
+                }
+  
+            }else{
+                
+                //errorcode nog toevoegen
+                $error .=  "Er is iets misgegaan: Errorcode[142]";
+            }
+           
+        }else{
+                
+                //Fout bij invoeren threads tabel
+                $error .=  "Er is iets misgegaan: Errorcode[141]";
+                echo $sql_insert_thread_threads;
+            }
+    }else{
+                
+        //same title thread error
+        $error .=  "Er is iets misgegaan: Errorcode[140]";
+    }
+}
+
+
+
+
 //function to display all the categories and subcategories
 function getCategoryTree($conn) {
     //sql query to get all the categories
@@ -213,8 +293,8 @@ function getCategoryTree($conn) {
         while($row_get_subcategories_from_db = $result_get_subcategories_from_db->fetch_assoc()){
             $cat_div.= "
             <div class = 'subcat_container'>
-                <div class = 'subcat_title_container'>".$row_get_subcategories_from_db['subcat_title']."</div>
-                <div class = 'subcat_thread_count_container'>0</div>
+                <div class = 'subcat_title_container'><a class='subcat_link' href= 'topic.php?cat=".$row_get_categories_from_db['id']."&subcat=".$row_get_subcategories_from_db['id']."'>".$row_get_subcategories_from_db['subcat_title']."</a></div>
+                <div class = 'subcat_thread_count_container'>".$row_get_subcategories_from_db['subcat_threads_count']."</div>
             </div>";
         } $cat_div.= '
         </div>';
@@ -222,6 +302,61 @@ function getCategoryTree($conn) {
     $cat_div.= "</div><br>";
     return $cat_div;
 }
+
+function getThreads($conn, $cat_id, $subcat_id){
+
+    //the outer div for all the threads
+    $threads_div = "";
+    $threads_div.= "<table class='threads_container_inner'>";
+        $sql_get_all_threads_from_subcat = "SELECT * FROM threads INNER JOIN subcategories ON subcategories.id = threads.subcat_id INNER JOIN categories ON categories.id = threads.cat_id INNER JOIN users ON users.id = threads.author_id WHERE threads.subcat_id = ".$subcat_id."";
+        echo $sql_get_all_threads_from_subcat;
+        $result_get_all_threads_from_subcat = $conn->query($sql_get_all_threads_from_subcat);
+        $threads_div.= "<tr class='thread_header'>
+                <th class='cat_title_container'>Thread</th>
+                <th class='subcat_thread_count_head_container'>Replies</th>
+            </tr>";
+        while($row_get_all_threads_from_subcat = $result_get_all_threads_from_subcat->fetch_assoc()){
+            //get all variables 
+            $thread_title = $row_get_all_threads_from_subcat['title'];
+            $thread_replies = $row_get_all_threads_from_subcat['replies'];
+            $time_created = $row_get_all_threads_from_subcat['time_created'];
+            $thread_id = $row_get_all_threads_from_subcat['id'];
+            $username = $row_get_all_threads_from_subcat['username'];
+
+
+
+
+            $threads_div.= "
+            <tr class='thread_container'>
+                <td class='thread_left'>
+                    <a class='thread_link' href='thread.php?thread=".$thread_id."'>".$thread_title."</a><br>
+                    posted by: <span class='author_title'>".$username."</span> at ".$time_created."
+                </td>
+                
+                <td class='thread_right'>
+                    $thread_replies
+                </td>
+            </tr>";
+            //sql query to get all the subcategories
+        }
+
+
+    $threads_div.= "</table>";
+    return $threads_div;
+
+
+
+}
+
+function showSubcatHeader($conn, $subcat_id){
+    $sql_get_categories_from_db = "SELECT * FROM subcategories INNER JOIN categories ON categories.id = subcategories.cat_id WHERE subcategories.id=".$subcat_id."";
+    $result_get_categories_from_db = $conn->query($sql_get_categories_from_db);
+    $row_get_categories_from_db = $result_get_categories_from_db->fetch_assoc();
+    $cat_title = $row_get_categories_from_db['cat_title'];
+    return $cat_title;
+
+}
+
 // if($_SESSION['user']['logged_in_as'] == "admin"){
     //     //setting the json categories value to blank
     //     $_SESSION['categories'] = [];

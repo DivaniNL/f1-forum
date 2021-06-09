@@ -59,3 +59,36 @@
         }
     }
 }
+//add comments to css
+.threads_container_outer{
+    background-color: aquamarine;
+    width: 80%;
+    .threads_container_inner{
+        width: 50%;
+        background-color: black;
+        margin: 0 auto;
+        color: white;
+        overflow:auto; 
+
+        .thread_container{
+            background-color: black;
+            width: 100%;
+            overflow:auto; 
+            .thread_left{
+                background-color: purple;
+                .thread_title{
+
+                }
+                .author_title{
+                    color: brown;
+                }
+
+            }
+            .thread_right{
+                background-color: orange;
+            }
+        }
+    }
+
+
+}
