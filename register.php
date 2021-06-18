@@ -21,25 +21,25 @@ if(isset($_SESSION['user'])){ //if login in session is not set
                 <form action="" method="POST">
                     <!-- Username Input -->
                     <label for="username">Username</label>
-                    <input id="username" type="text" name="username">
+                    <input id="username" type="text" name="username"><br>
                     <!-- First Name Input -->
                     <label for="firstname">First Name</label>
-                    <input id="firstname" type="text" name="firstname">
+                    <input id="firstname" type="text" name="firstname"><br>
                     <!-- Last Name Input -->
                     <label for="lastname">Last Name</label>
-                    <input id="lastname" type="text" name="lastname">
+                    <input id="lastname" type="text" name="lastname"><br>
                     <!-- Email-Adress Input -->
                     <label for="email">Email-Adress</label>
-                    <input id="email" type="email" name="email">
+                    <input id="email" type="email" name="email"><br>
                     <!-- Email-Adress Confirmation -->
                     <label for="confirm_email">Confirm Email-Adress</label>
-                    <input id="confirm_email" type="email" name="confirm_email">
+                    <input id="confirm_email" type="email" name="confirm_email"><br>
                     <!-- Password Input -->
                     <label for="password">Password</label>
-                    <input id="password" type="password" name="password" pattern="^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{7,}$" title="Minimum of 7 characters. Should have at least one special character and one number and one UpperCase Letter.">
+                    <input id="password" type="password" name="password" pattern="^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{7,}$" title="Minimum of 7 characters. Should have at least one special character and one number and one UpperCase Letter."><br>
                     <!-- Password Confirmation -->
                     <label for="confirm_password">Confirm Password</label>
-                    <input id="confirm_password" type="password" name="confirm_password" pattern="^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{7,}$" title="Minimum of 7 characters. Should have at least one special character and one number and one UpperCase Letter.">
+                    <input id="confirm_password" type="password" name="confirm_password" pattern="^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{7,}$" title="Minimum of 7 characters. Should have at least one special character and one number and one UpperCase Letter."><br>
                     <!-- Favourite Driver Input -->
                     <label for="driver">Favourite Driver</label>
                     <select name="favourite_driver" id="favourite_driver">
