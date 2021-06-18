@@ -28,6 +28,7 @@ if(isset($_GET['subcat'])){
     Zwart is een categorie met de titel, en een kopje aantal onderwerpen(threads)<br>
     Grijs zijn alle subcategorieën met het aantal onderwerpen eronder
     <div class='threads_container_outer'>
+    <?php echo showSubcatHeader($conn, $subcat_id, $cat_id) ?>
     <button class="addtopic_btn"> <a href="addtopic.php?cat=<?php echo $cat_id?>&subcat=<?php echo $subcat_id?>">Add a Topic</a></button>
     <?php 
     //Show subtopic title
