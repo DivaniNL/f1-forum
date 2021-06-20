@@ -11,12 +11,14 @@ $error = "";
 
 if (isset($_POST['register'])) {
 
+    
+
     //preparing the query to fill the users table
-    $sql_insert_user = $conn->prepare("INSERT INTO `users`(username, firstname, lastname, date_registered, `admin`, favourite_driver) VALUES(?,?,?,?,?,?)");
-    $sql_insert_user->bind_param("ssssis", $post_username, $post_firstname, $post_lastname, $date, $var, $post_favourite_driver);
+    $sql_insert_user = $conn->prepare("INSERT INTO `users`(username, firstname, lastname, avatar, date_registered, `admin`, favourite_driver) VALUES(?,?,?,?,?,?,?)");
+    $sql_insert_user->bind_param("sssssis", $post_username, $post_firstname, $post_lastname, $avatar, $date, $var, $post_favourite_driver);
     //preparing the query to fill the credentials table
-    $result_insert_user_credentials = $conn->prepare("INSERT INTO `credentials`(`user_id`, email, `password`) VALUES(?, ?, ?)");
-    $result_insert_user_credentials->bind_param("iss", $user_id, $post_email, $post_lastname, $password_hashed);
+    $sql_insert_user_credentials = $conn->prepare("INSERT INTO `credentials`(`user_id`, email, `password`) VALUES(?, ?, ?)");
+    $sql_insert_user_credentials->bind_param("iss", $user_id, $post_email, $password_hashed);
     //var is to fill up admin variable
     $var = 0;
     //getting the post values from the form at register.php
@@ -28,6 +30,19 @@ if (isset($_POST['register'])) {
     $post_favourite_driver = $_POST['favourite_driver'];
     $post_email_confirm = $_POST['confirm_email'];
     $post_password_confirm = $_POST['confirm_password'];
+    //creating an avatar
+    $im = imagecreatefrompng($_FILES['avatar']['tmp_name']);
+    $size = min(imagesx($im), imagesy($im));
+    //this will be optimizeed, the crop
+    $im2 = imagecrop($im, ['x' => 0, 'y' => 0, 'width' => $size, 'height' => $size]);
+    if ($im2 !== FALSE) {
+        //place the avatar in the folder
+        imagepng($im2, "assets/avatars/_avatar_".$post_username.".png");
+        imagedestroy($im2);
+    }
+    imagedestroy($im);
+    //placing the avatar name under a variable
+    $avatar = "_avatar_".$post_username.".png";
     //saves current date for date_registered column in the users table
     $date = date('Y-m-d');
 
@@ -58,16 +73,15 @@ if (isset($_POST['register'])) {
                 //get the user_id and assign it to the variable user_id
                 $row_get_user_id = $result_get_user_id->fetch_assoc();
                 $user_id = $row_get_user_id['id'];
-                if ($result_insert_user_credentials->execute()) {
+
+                if ($sql_insert_user_credentials->execute()) {
                     //if the credentials table is filled, go to the login page.
                     header("Location: login.php");
                 } else {
                     $error .= "Er is iets misgegaan: Errorcode[12]";
-                    fwrite('logs.txt', $sql_insert_user_credentials);
                 }
             } else {
                 echo "Er is iets misgegaan: Errorcode[11]";
-                fwrite('logs.txt', $sql_insert_user);
             }
         } else {
             //if there is already a user with either the same username or email
@@ -433,10 +447,15 @@ function getReplies($conn, $cat_id, $subcat_id, $thread_id){
     $result_get_replies_and_user_info_from_db = $sql_get_replies_and_user_info_from_db->get_result();
     while($row_get_replies_and_user_info_from_db = $result_get_replies_and_user_info_from_db->fetch_assoc()){
         //for each reply for the current thread, make a div
+        $replies_div .= "<div class='reply_container'>";
         $post_body = $row_get_replies_and_user_info_from_db['post_body'];
         $username = $row_get_replies_and_user_info_from_db['username'];
+        $avatar = $row_get_replies_and_user_info_from_db['avatar'];
         $replies_div .= "<h1>Username: ".$username."</h1><br>";
+        $replies_div .= "<img src='assets/avatars/".$avatar."'><br>";
         $replies_div .= "<p>Post: ".$post_body."</p><br>";
+
+        $replies_div .= "</div'>";
     }
     $replies_div .= "</div>";
 

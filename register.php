@@ -18,7 +18,7 @@ if(isset($_SESSION['user'])){ //if login in session is not set
     	    <!-- Register form container -->
             <div class="form-container">
     	        <!-- Register form -->
-                <form action="" method="POST">
+                <form action="" method="POST" enctype="multipart/form-data">
                     <!-- Username Input -->
                     <label for="username">Username</label>
                     <input id="username" type="text" name="username"><br>
@@ -64,6 +64,11 @@ if(isset($_SESSION['user'])){ //if login in session is not set
                         <option value="George Russel">George Russel</option>
                         <option value="Nicholas Latifi">Nicholas Latifi</option>
                     </select>
+
+                    <!-- Avatar Input -->
+                    <input type="file" name="avatar" id="avatar">
+
+
                     <!-- Submit And Register -->
                     <input id="register" type="submit" name="register">
                 </form>
