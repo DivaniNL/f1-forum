@@ -8,11 +8,7 @@ include 'conn/conn.php';
 //the error variable stores all the errors and displays it in the div "error-container"
 $error = "";
 //registering a user
-
 if (isset($_POST['register'])) {
-
-    
-
     //preparing the query to fill the users table
     $sql_insert_user = $conn->prepare("INSERT INTO `users`(username, firstname, lastname, avatar, date_registered, `admin`, favourite_driver) VALUES(?,?,?,?,?,?,?)");
     $sql_insert_user->bind_param("sssssis", $post_username, $post_firstname, $post_lastname, $avatar, $date, $var, $post_favourite_driver);
@@ -31,18 +27,41 @@ if (isset($_POST['register'])) {
     $post_email_confirm = $_POST['confirm_email'];
     $post_password_confirm = $_POST['confirm_password'];
     //creating an avatar
-    $im = imagecreatefrompng($_FILES['avatar']['tmp_name']);
-    $size = min(imagesx($im), imagesy($im));
-    //this will be optimizeed, the crop
-    $im2 = imagecrop($im, ['x' => 0, 'y' => 0, 'width' => $size, 'height' => $size]);
-    if ($im2 !== FALSE) {
-        //place the avatar in the folder
-        imagepng($im2, "assets/avatars/_avatar_".$post_username.".png");
-        imagedestroy($im2);
+    $file = $_FILES["avatar"]["name"]; 
+    $check_ext = strtolower(pathinfo($file,PATHINFO_EXTENSION));
+    echo $check_ext;
+    //if png
+    
+    if ($check_ext == "png") { 
+        $im = imagecreatefrompng($_FILES['avatar']['tmp_name']);
+        $size = min(imagesx($im), imagesy($im));
+        //this will be optimizeed, the crop
+        $im2 = imagecrop($im, ['x' => 0, 'y' => 0, 'width' => $size, 'height' => $size]);
+        if ($im2 !== FALSE) {
+            //place the avatar in the folder
+            imagepng($im2, "assets/avatars/_avatar_".$post_username.".png");
+            imagedestroy($im2);
+        }
+        imagedestroy($im);
+        
+        //placing the avatar name under a variable
+        $avatar = "_avatar_".$post_username.".png";
+    }elseif ($check_ext == "jpg" ||$check_ext == "jpeg" ) {
+        $im = imagecreatefromjpeg($_FILES['avatar']['tmp_name']);
+        $size = min(imagesx($im), imagesy($im));
+        //this will be optimizeed, the crop
+        $im2 = imagecrop($im, ['x' => 0, 'y' => 0, 'width' => $size, 'height' => $size]);
+        if ($im2 !== FALSE) {
+            //place the avatar in the folder
+            imagejpeg($im2, "assets/avatars/_avatar_".$post_username.".jpg");
+            imagedestroy($im2);
+        }
+        imagedestroy($im);
+        echo "hoi jpg of jpeg";
+        //placing the avatar name under a variable
+        $avatar = "_avatar_".$post_username.".jpg";
     }
-    imagedestroy($im);
-    //placing the avatar name under a variable
-    $avatar = "_avatar_".$post_username.".png";
+    
     //saves current date for date_registered column in the users table
     $date = date('Y-m-d');
 
@@ -124,23 +143,17 @@ if (isset($_POST['login'])) {
     $sql_auth_normaluser_login->execute();
     $sql_auth_normaluser_login->store_result();
     $sql_auth_normaluser_login_num_rows = $sql_auth_normaluser_login->num_rows;
-
     //checks if there are users with the email-adress or username entered in the inputfield
     if ($sql_auth_normaluser_login_num_rows < 1) {
         $error .= 'Er bestaat geen gebruiker met dit email-adres of gebruikersnaam!';
     } else {
-        //preparing query to get all the users with the same email or username
         $sql_auth_normaluser_login = $conn->prepare("SELECT * FROM users INNER JOIN credentials ON credentials.user_id = users.id WHERE credentials.email = ? OR users.username = ?");
         $sql_auth_normaluser_login->bind_param("ss", $post_login_username_email, $post_login_username_email2);
         $sql_auth_normaluser_login->execute();
         $result_auth_normaluser_login = $sql_auth_normaluser_login->get_result();
         $row_auth_normaluser_login = $result_auth_normaluser_login->fetch_assoc();
-        //gets the hashed password from the user which is trying to login to compare. This is: $row_auth_normaluser_login['password']
-        //compare the inserted password in the input field with the hashed password from the database
         if (password_verify($post_login_password, $row_auth_normaluser_login['password'])) {
-            //sets session variable for the logged in user
             $_SESSION['user'] = array(
-
                 'ID' => $row_auth_normaluser_login["user_id"],
                 'Username' => $row_auth_normaluser_login["username"],
                 'Firstname' => $row_auth_normaluser_login["firstname"],
@@ -150,13 +163,11 @@ if (isset($_POST['login'])) {
                 'date_registered' => $row_auth_normaluser_login["date_registered"],
                 'threads_count' => $row_auth_normaluser_login["threads_count"],
             );
-            //if you are a admin user, add another key to the session variable, specifying what kind of user you are.
             if ($_SESSION['user']["Admin"] == 1) {
                 $_SESSION['user']['logged_in_as'] = "admin";
             } elseif ($_SESSION['user']["Admin"] == 0) {
                 $_SESSION['user']['logged_in_as'] = "client";
             }
-            //redirects you to the home page after logging in
             header("Location: index.php");
         } else {
             $error .= 'Invalid password.';

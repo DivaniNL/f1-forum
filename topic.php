@@ -1,9 +1,7 @@
 
 <?php
 include "handler.php";
-if(!isset($_SESSION['user'])){ //if login in session is not set
-    header("Location: login.php");
-}
+
 
 if(isset($_GET['cat'])){
     $cat_id = $_GET['cat'];
@@ -22,12 +20,8 @@ if(isset($_GET['subcat'])){
     <title>F1-Forum</title>
 </head>
 <body>
-    Dit Zie je als je ingelogd bent. Aan deze site wordt gewerkt.
-    Dit Zie je als je ingelogd bent en geen admin bent. Aan deze site wordt gewerkt.<br>
-    Groen wordt het gedeelte waar alle categorieën getoont worden<br>
-    Zwart is een categorie met de titel, en een kopje aantal onderwerpen(threads)<br>
-    Grijs zijn alle subcategorieën met het aantal onderwerpen eronder
-    <div class='threads_container_outer'>
+<div class="container_main">
+    <div class='container_threads_outer'>
     <?php echo showSubcatHeader($conn, $subcat_id, $cat_id) ?>
     <button class="addtopic_btn"> <a href="addtopic.php?cat=<?php echo $cat_id?>&subcat=<?php echo $subcat_id?>">Add a Topic</a></button>
     <?php 
@@ -37,5 +31,6 @@ if(isset($_GET['subcat'])){
     echo getThreads($conn, $cat_id, $subcat_id);
      ?>
      </div>
+</div>
 </body>
 </html>

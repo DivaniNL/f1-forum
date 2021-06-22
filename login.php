@@ -1,8 +1,6 @@
 <?php
+ob_start();
 include 'handler.php';
-if(isset($_SESSION['user'])){ //if login in session is not set
-    header("Location: index.php");
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +12,7 @@ if(isset($_SESSION['user'])){ //if login in session is not set
     </head>
     <body>
         <!-- Main container -->
-        <div class="container">
+        <div class="container_main">
             <!-- Login Form container -->
             <div class="form-container">
                 <!-- Login Form -->
@@ -39,3 +37,9 @@ if(isset($_SESSION['user'])){ //if login in session is not set
         </div>
     </body>
 </html>
+<?php
+if(isset($_SESSION['user'])){
+    header("Location: index.php");
+}
+ob_end_flush();
+?>

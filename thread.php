@@ -1,8 +1,6 @@
 <?php
 include "handler.php";
-if(!isset($_SESSION['user'])){ //if login in session is not set
-    header("Location: login.php");
-}
+
 
 if(isset($_GET['cat'])){
     $cat_id = $_GET['cat'];
@@ -26,6 +24,7 @@ if(isset($_GET['thread'])){
     
 </head>
 <body>
+<div class="container_main">
     <div class='replies_container_outer'>
     <!-- Get full directory -->
     <?php echo showThreadFamily($conn, $cat_id, $subcat_id, $thread_id) ?>
@@ -37,5 +36,6 @@ if(isset($_GET['thread'])){
     echo getReplies($conn, $cat_id, $subcat_id, $thread_id);
      ?>
      </div>
+</div>
 </body>
 </html>

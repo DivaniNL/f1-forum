@@ -14,9 +14,9 @@ if(isset($_SESSION['user'])){ //if login in session is not set
     </head>
     <body>
         <!-- Main container -->
-        <div class="container">
+        <div class="container_main">
     	    <!-- Register form container -->
-            <div class="form-container">
+            <div class="container_form">
     	        <!-- Register form -->
                 <form action="" method="POST" enctype="multipart/form-data">
                     <!-- Username Input -->
@@ -73,11 +73,11 @@ if(isset($_SESSION['user'])){ //if login in session is not set
                     <input id="register" type="submit" name="register">
                 </form>
             </div>
-            <div class="login-container">
+            <div class="login_prompt">
                 Already have an account? <a href="login.php">Log In</a> Here!
             </div>
             <!-- Errors occouring while registering will appear here -->
-            <div class="error-container"><?php echo $error ?> </div>
+            <div class="container_error"><?php echo $error ?> </div>
         </div>
     </body>
 </html>

@@ -8,9 +8,7 @@ if(isset($_GET['subcat'])){
 }
 include "handler.php";
 
-if(!isset($_SESSION['user'])){ //if login in session is not set
-    header("Location: login.php");
-}
+
 
 
 
@@ -26,12 +24,12 @@ if(!isset($_SESSION['user'])){ //if login in session is not set
     <title>F1-Forum</title>
 </head>
 <body>
-    <div class='container'>
+<div class="container_main">
         
         <!-- Subcat Header -->
         <div class="subcat_header"><?php echo showSubcatHeader($conn, $subcat_id, $cat_id) ?></div>
         
-        <div class="form-container">
+        <div class="container_form">
             <!-- Register form -->
             <form action="" method="POST">
                 <!-- Username Input -->
@@ -63,7 +61,7 @@ if(!isset($_SESSION['user'])){ //if login in session is not set
             </form>
         </div>
         <!-- Errors occouring while registering will appear here -->
-        <div class="error-container"><?php echo $error ?> </div>
+        <div class="container_error"><?php echo $error ?> </div>
     </div>
 </body>
 </html>

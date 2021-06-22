@@ -10,9 +10,7 @@ if(isset($_GET['thread'])){
 }
 include "handler.php";
 
-if(!isset($_SESSION['user'])){ //if login in session is not set
-    header("Location: login.php");
-}
+
 
 ?>
 
@@ -27,11 +25,12 @@ if(!isset($_SESSION['user'])){ //if login in session is not set
     
 </head>
 <body>
+<div class="container_main">
     <!-- Outer div of the reply page -->
     <div class="reply_page_container_outer">
         <h2>Reply to <?php echo showThreadHeader($conn, $cat_id, $subcat_id, $thread_id) ?></h2>
         <!-- The container of the reply form -->
-        <div class="reply_form_container">
+        <div class="container_form_reply">
             <form action="#" method="POST">
             <!-- Thread Id Input-->
             <input id="thread_id" type="hidden" name="thread_id" value= <?php echo $thread_id ?>>
@@ -48,5 +47,6 @@ if(!isset($_SESSION['user'])){ //if login in session is not set
 
         </div>
     </div>
+</div>
 </body>
 </html>
