@@ -5,7 +5,7 @@
 }
 @import 'media';
 body{
-    background-color: white;
+    background-color: #333;
     @include respond(mobile) {
         min-width: 0px;        
     }
