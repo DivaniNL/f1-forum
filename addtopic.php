@@ -1,5 +1,6 @@
-
 <?php
+include 'conn/conn.php';
+
 if(isset($_GET['cat'])){
     $cat_id = $_GET['cat'];
 }
@@ -7,14 +8,12 @@ if(isset($_GET['subcat'])){
     $subcat_id = $_GET['subcat'];
 }
 
-var_dump($_SESSION['user']);
-
-if (!isset($_SESSION['user'])) {
+if (empty($_SESSION['user'])) {
     header("Location: topic.php?cat=".$cat_id."&subcat=".$subcat_id."");
 }
 
-
 include "handler.php";
+
 
 
 

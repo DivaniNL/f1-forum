@@ -1,9 +1,7 @@
 <?php
-include 'conn/conn.php';
+// include 'conn/conn.php';
 ?>
-<style>
-<?php include 'assets/css/style.min.css';?>
-</style>
+
 <?php
 //the error variable stores all the errors and displays it in the div "error-container"
 $error = "";
@@ -261,15 +259,11 @@ if (isset($_POST['newthread'])) {
     if ($sql_insert_thread_threads->execute()) {
         //if the threads table is filled
         //GET THREAD ID
-        $sql_get_thread_id = "SELECT * FROM threads ORDER BY id DESC LIMIT 1";
-        //do the query
-        $result_get_thread_id = $conn->query($sql_get_thread_id);
-        //get the thread_id and assign it to the variable thread_id
-        $row_get_thread_id = $result_get_thread_id->fetch_assoc();
-        $thread_id = $row_get_thread_id['id'];
+        $thread_id = $conn->insert_id;
         //preparing query to insert thread info in the replies table
         $sql_insert_thread_replies = $conn->prepare("INSERT INTO `replies`(`user_id`, thread_id, date_time, post_body) VALUES(?,?,?,?)");
         $sql_insert_thread_replies->bind_param("iiss", $author_id, $thread_id, $time_created, $post_first_reply);
+        // echo mysqli_error($conn);exit;
         if ($sql_insert_thread_replies->execute()) {
             //if the replies table is filled
             //preparing query to get threads count from the user which is logged in
@@ -301,7 +295,7 @@ if (isset($_POST['newthread'])) {
                 //update thread count in the subcategories table
                 if ($sql_update_subcat_threads_count->execute()) {
                     //if the thread count is updated in subcategories table
-                    header("Location: index.php");
+                    header("Location: topic.php?cat=".$cat_id."&subcat=".$subcat_id."");
                 } else {
                     $error .= "Er is iets misgegaan: Errorcode[144]";
                 }
@@ -313,6 +307,7 @@ if (isset($_POST['newthread'])) {
         } else {
             //errorcode nog toevoegen
             $error .= "Er is iets misgegaan: Errorcode[142]";
+            // echo mysqli_error($conn);exit;
         }
     } else {
         //Fout bij invoeren threads tabel
@@ -499,7 +494,6 @@ function showTopicFamily($conn, $cat_id, $subcat_id)
     $result_get_thread_family = $sql_get_thread_family->get_result();
     $row_get_thread_family = $result_get_thread_family->fetch_assoc();
     //assigning the title of the current thread to $thread_title
-    $thread_title = $row_get_thread_family['thread_title'];
     //assigning the subcategory name which this thread is placed under to $subcat_title
     $subcat_title = $row_get_thread_family['subcat_title'];
     //assigning the category name which this thread is placed under to $cat_title
@@ -552,6 +546,10 @@ function showSubcatHeader($conn, $subcat_id)
 //     //query to get all categories from the database
 // }
 ?>
+
+<style>
+<?php include 'assets/css/style.min.css';?>
+</style>
 <!-- The script below makes sure a form is not submitted when reloading a page -->
 <script>
 if ( window.history.replaceState ) {

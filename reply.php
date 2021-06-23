@@ -1,4 +1,6 @@
 <?php
+include 'conn/conn.php';
+
 if(isset($_GET['cat'])){
     $cat_id = $_GET['cat'];
 }
