@@ -114,7 +114,8 @@ if(isset($_POST['login'])){
                 $_SESSION['user']['logged_in_as'] = "client";
             }
             //redirects you to the home page after logging in
-            header("Location: index.php");            
+            
+            // header("Location: index.php");            
         } else {
         $error .=  'Invalid password.';
         }
@@ -138,6 +139,7 @@ if(isset($_POST['addcat'])){
         if($result_insert_category = $conn->query($sql_insert_category)){
             header("Location: index.php");    
         }else{
+            
             $error .=  "Er is iets misgegaan: Errorcode[120]";
             fwrite('logs.txt', $sql_insert_category);
         }
