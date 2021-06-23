@@ -1,9 +1,7 @@
 <?php
-include 'conn/conn.php';
+// include 'conn/conn.php';
 ?>
-<style>
-<?php include 'assets/css/style.min.css';?>
-</style>
+
 <?php
 //the error variable stores all the errors and displays it in the div "error-container"
 $error = "";
@@ -27,17 +25,17 @@ if (isset($_POST['register'])) {
     $post_email_confirm = $_POST['confirm_email'];
     $post_password_confirm = $_POST['confirm_password'];
     //creating an avatar
-    $file = $_FILES["avatar"]["name"]; 
-    $check_ext = strtolower(pathinfo($file,PATHINFO_EXTENSION));
+    $file = $_FILES["avatar"]["name"];
+    $check_ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
     echo $check_ext;
     //if png
     
-    if ($check_ext == "png") { 
+    if ($check_ext == "png") {
         $im = imagecreatefrompng($_FILES['avatar']['tmp_name']);
         $size = min(imagesx($im), imagesy($im));
         //this will be optimizeed, the crop
         $im2 = imagecrop($im, ['x' => 0, 'y' => 0, 'width' => $size, 'height' => $size]);
-        if ($im2 !== FALSE) {
+        if ($im2 !== false) {
             //place the avatar in the folder
             imagepng($im2, "assets/avatars/_avatar_".$post_username.".png");
             imagedestroy($im2);
@@ -46,12 +44,12 @@ if (isset($_POST['register'])) {
         
         //placing the avatar name under a variable
         $avatar = "_avatar_".$post_username.".png";
-    }elseif ($check_ext == "jpg" ||$check_ext == "jpeg" ) {
+    } elseif ($check_ext == "jpg" ||$check_ext == "jpeg") {
         $im = imagecreatefromjpeg($_FILES['avatar']['tmp_name']);
         $size = min(imagesx($im), imagesy($im));
         //this will be optimizeed, the crop
         $im2 = imagecrop($im, ['x' => 0, 'y' => 0, 'width' => $size, 'height' => $size]);
-        if ($im2 !== FALSE) {
+        if ($im2 !== false) {
             //place the avatar in the folder
             imagejpeg($im2, "assets/avatars/_avatar_".$post_username.".jpg");
             imagedestroy($im2);
@@ -121,7 +119,7 @@ if (isset($_POST['register'])) {
             //checks if there is already a user with the same EMAIL If the amount of rows is samaller then 1 there isn't
             if ($sql_check_existing_email_num_rows >= 1) {
                 $error .= "Er bestaat al een gebruiker met dit mailadres.";
-                //checks if there is already a user with the same USERNAME If the amount of rows is samaller then 1 there isn't
+            //checks if there is already a user with the same USERNAME If the amount of rows is samaller then 1 there isn't
             } elseif ($sql_check_existing_username_num_rows >= 1) {
                 $error .= "Er bestaat al een gebruiker met deze gebruikersnaam.";
             } else {
@@ -261,15 +259,11 @@ if (isset($_POST['newthread'])) {
     if ($sql_insert_thread_threads->execute()) {
         //if the threads table is filled
         //GET THREAD ID
-        $sql_get_thread_id = "SELECT * FROM threads ORDER BY id DESC LIMIT 1";
-        //do the query
-        $result_get_thread_id = $conn->query($sql_get_thread_id);
-        //get the thread_id and assign it to the variable thread_id
-        $row_get_thread_id = $result_get_thread_id->fetch_assoc();
-        $thread_id = $row_get_thread_id['id'];
+        $thread_id = $conn->insert_id;
         //preparing query to insert thread info in the replies table
         $sql_insert_thread_replies = $conn->prepare("INSERT INTO `replies`(`user_id`, thread_id, date_time, post_body) VALUES(?,?,?,?)");
         $sql_insert_thread_replies->bind_param("iiss", $author_id, $thread_id, $time_created, $post_first_reply);
+        // echo mysqli_error($conn);exit;
         if ($sql_insert_thread_replies->execute()) {
             //if the replies table is filled
             //preparing query to get threads count from the user which is logged in
@@ -301,7 +295,7 @@ if (isset($_POST['newthread'])) {
                 //update thread count in the subcategories table
                 if ($sql_update_subcat_threads_count->execute()) {
                     //if the thread count is updated in subcategories table
-                    header("Location: index.php");
+                    header("Location: topic.php?cat=".$cat_id."&subcat=".$subcat_id."");
                 } else {
                     $error .= "Er is iets misgegaan: Errorcode[144]";
                 }
@@ -313,6 +307,7 @@ if (isset($_POST['newthread'])) {
         } else {
             //errorcode nog toevoegen
             $error .= "Er is iets misgegaan: Errorcode[142]";
+            // echo mysqli_error($conn);exit;
         }
     } else {
         //Fout bij invoeren threads tabel
@@ -445,7 +440,8 @@ function getThreads($conn, $cat_id, $subcat_id)
     //returning div. Echo this function to see the div
     return $threads_div;
 }
-function getReplies($conn, $cat_id, $subcat_id, $thread_id){
+function getReplies($conn, $cat_id, $subcat_id, $thread_id)
+{
     //emptying the replies div container
     $replies_div = "";
     //the outer div for all replies
@@ -456,7 +452,7 @@ function getReplies($conn, $cat_id, $subcat_id, $thread_id){
     //get all replies
     $sql_get_replies_and_user_info_from_db->execute();
     $result_get_replies_and_user_info_from_db = $sql_get_replies_and_user_info_from_db->get_result();
-    while($row_get_replies_and_user_info_from_db = $result_get_replies_and_user_info_from_db->fetch_assoc()){
+    while ($row_get_replies_and_user_info_from_db = $result_get_replies_and_user_info_from_db->fetch_assoc()) {
         //for each reply for the current thread, make a div
         $replies_div .= "<div class='reply_container'>";
         $post_body = $row_get_replies_and_user_info_from_db['post_body'];
@@ -472,10 +468,9 @@ function getReplies($conn, $cat_id, $subcat_id, $thread_id){
 
     //return replies div
     return $replies_div;
-
-
 }
-function showThreadHeader($conn, $cat_id, $subcat_id, $thread_id){
+function showThreadHeader($conn, $cat_id, $subcat_id, $thread_id)
+{
     //prepare query to get thread header
     $sql_get_thread_title = $conn->prepare("SELECT * FROM threads WHERE id=?");
     $sql_get_thread_title->bind_param("i", $thread_id);
@@ -488,7 +483,27 @@ function showThreadHeader($conn, $cat_id, $subcat_id, $thread_id){
     //this function returns the thread's title. Echo this function on thread.php to see the title of the thread
     return $thread_title;
 }
-function showThreadFamily($conn, $cat_id, $subcat_id, $thread_id){
+
+function showTopicFamily($conn, $cat_id, $subcat_id)
+{
+    //prepare query to get thread family
+    $sql_get_thread_family = $conn->prepare("SELECT * FROM categories INNER JOIN subcategories ON subcategories.cat_id = categories.id WHERE subcategories.id=?");
+    $sql_get_thread_family->bind_param("i", $subcat_id);
+    //get thread family
+    $sql_get_thread_family->execute();
+    $result_get_thread_family = $sql_get_thread_family->get_result();
+    $row_get_thread_family = $result_get_thread_family->fetch_assoc();
+    //assigning the title of the current thread to $thread_title
+    //assigning the subcategory name which this thread is placed under to $subcat_title
+    $subcat_title = $row_get_thread_family['subcat_title'];
+    //assigning the category name which this thread is placed under to $cat_title
+    $cat_title = $row_get_thread_family['cat_title'];
+    //this function returns the thread's title. Echo this function on thread.php to see the title of the thread
+    return "<p><a href='index.php'>HOME</a> -> <a href='topic.php?cat=" . $cat_id . "&subcat=" . $subcat_id . "'>".$subcat_title."</a></p>";
+}
+
+function showThreadFamily($conn, $cat_id, $subcat_id, $thread_id)
+{
     //prepare query to get thread family
     $sql_get_thread_family = $conn->prepare("SELECT *, threads.id as threadId, categories.id as catId, subcategories.id as subcatId, threads.title as thread_title FROM threads INNER JOIN categories ON categories.id = threads.cat_id INNER JOIN subcategories ON subcategories.id = threads.subcat_id WHERE threads.id=?");
     $sql_get_thread_family->bind_param("i", $thread_id);
@@ -531,6 +546,10 @@ function showSubcatHeader($conn, $subcat_id)
 //     //query to get all categories from the database
 // }
 ?>
+
+<style>
+<?php include 'assets/css/style.min.css';?>
+</style>
 <!-- The script below makes sure a form is not submitted when reloading a page -->
 <script>
 if ( window.history.replaceState ) {

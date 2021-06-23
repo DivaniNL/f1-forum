@@ -1,4 +1,5 @@
 <?php
+include 'conn/conn.php';
 include "handler.php";
 
 
@@ -25,10 +26,14 @@ if(isset($_GET['thread'])){
 </head>
 <body>
 <div class="container_main">
+<?php include 'header.php';?>
     <div class='replies_container_outer'>
     <!-- Get full directory -->
     <?php echo showThreadFamily($conn, $cat_id, $subcat_id, $thread_id) ?>
-    <button class="reply_btn"> <a href="reply.php?cat=<?php echo $cat_id?>&subcat=<?php echo $subcat_id?>&thread=<?php echo $thread_id?>">Reply</a></button>
+    <?php if(isset($_SESSION['user'])){ 
+        echo"<button class='reply_btn'> <a href='reply.php?thread=".$thread_id."&cat=".$cat_id."&subcat=".$subcat_id."'>Reply</a></button>";
+    }
+    ?>
     <?php 
     //Show replies
     

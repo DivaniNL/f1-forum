@@ -1,13 +1,18 @@
-
 <?php
+include 'conn/conn.php';
+
 if(isset($_GET['cat'])){
     $cat_id = $_GET['cat'];
 }
 if(isset($_GET['subcat'])){
     $subcat_id = $_GET['subcat'];
 }
-include "handler.php";
 
+if (empty($_SESSION['user'])) {
+    header("Location: topic.php?cat=".$cat_id."&subcat=".$subcat_id."");
+}
+
+include "handler.php";
 
 
 
@@ -25,7 +30,7 @@ include "handler.php";
 </head>
 <body>
 <div class="container_main">
-        
+<?php include 'header.php';?>
         <!-- Subcat Header -->
         <div class="subcat_header"><?php echo showSubcatHeader($conn, $subcat_id, $cat_id) ?></div>
         
