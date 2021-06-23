@@ -14,7 +14,7 @@ if(isset($_SESSION['user'])){
     }
 }else{
     //if the user is not logged in at all, send it straight back to the login page
-    header("Location: ../login.php");
+    header("Location: ../index.php");
 }
 
 ?>
@@ -28,6 +28,8 @@ if(isset($_SESSION['user'])){
     <title>F1-Forum - Ontwikkelaarsomgeving</title>
 </head>
 <body>
+<div class="container_main">
     Dit Zie je als je ingelogd bent en een admin bent. Aan deze site wordt gewerkt.
+</div>
 </body>
 </html>

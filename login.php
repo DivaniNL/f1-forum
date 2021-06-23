@@ -1,8 +1,6 @@
 <?php
+ob_start();
 include 'handler.php';
-if(isset($_SESSION['user'])){ //if login in session is not set
-    header("Location: index.php");
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,17 +12,17 @@ if(isset($_SESSION['user'])){ //if login in session is not set
     </head>
     <body>
         <!-- Main container -->
-        <div class="container">
+        <div class="container_main">
             <!-- Login Form container -->
             <div class="form-container">
                 <!-- Login Form -->
                 <form action="" method="POST">
                     <!-- Username or Email-Adress Input -->
                     <label for="login_username_email">Username</label>
-                    <input id="login_username_email" type="text" name="login_username_email">
+                    <input id="login_username_email" type="text" name="login_username_email"><br>
                     <!-- Password Input -->
                     <label for="login_password">Password</label>
-                    <input id="login_password" type="password" name="login_password">
+                    <input id="login_password" type="password" name="login_password"><br>
                     <!-- Add avatar later -->
                     <!-- Submit and attempt to login -->
                     <input id="login" type="submit" name="login">
@@ -39,3 +37,9 @@ if(isset($_SESSION['user'])){ //if login in session is not set
         </div>
     </body>
 </html>
+<?php
+if(isset($_SESSION['user'])){
+    header("Location: index.php");
+}
+ob_end_flush();
+?>

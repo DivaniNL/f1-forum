@@ -14,32 +14,32 @@ if(isset($_SESSION['user'])){ //if login in session is not set
     </head>
     <body>
         <!-- Main container -->
-        <div class="container">
+        <div class="container_main">
     	    <!-- Register form container -->
-            <div class="form-container">
+            <div class="container_form">
     	        <!-- Register form -->
-                <form action="" method="POST">
+                <form action="" method="POST" enctype="multipart/form-data">
                     <!-- Username Input -->
                     <label for="username">Username</label>
-                    <input id="username" type="text" name="username">
+                    <input id="username" type="text" name="username"><br>
                     <!-- First Name Input -->
                     <label for="firstname">First Name</label>
-                    <input id="firstname" type="text" name="firstname">
+                    <input id="firstname" type="text" name="firstname"><br>
                     <!-- Last Name Input -->
                     <label for="lastname">Last Name</label>
-                    <input id="lastname" type="text" name="lastname">
+                    <input id="lastname" type="text" name="lastname"><br>
                     <!-- Email-Adress Input -->
                     <label for="email">Email-Adress</label>
-                    <input id="email" type="email" name="email">
+                    <input id="email" type="email" name="email"><br>
                     <!-- Email-Adress Confirmation -->
                     <label for="confirm_email">Confirm Email-Adress</label>
-                    <input id="confirm_email" type="email" name="confirm_email">
+                    <input id="confirm_email" type="email" name="confirm_email"><br>
                     <!-- Password Input -->
                     <label for="password">Password</label>
-                    <input id="password" type="password" name="password" pattern="^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{7,}$" title="Minimum of 7 characters. Should have at least one special character and one number and one UpperCase Letter.">
+                    <input id="password" type="password" name="password" pattern="^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{7,}$" title="Minimum of 7 characters. Should have at least one special character and one number and one UpperCase Letter."><br>
                     <!-- Password Confirmation -->
                     <label for="confirm_password">Confirm Password</label>
-                    <input id="confirm_password" type="password" name="confirm_password" pattern="^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{7,}$" title="Minimum of 7 characters. Should have at least one special character and one number and one UpperCase Letter.">
+                    <input id="confirm_password" type="password" name="confirm_password" pattern="^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{7,}$" title="Minimum of 7 characters. Should have at least one special character and one number and one UpperCase Letter."><br>
                     <!-- Favourite Driver Input -->
                     <label for="driver">Favourite Driver</label>
                     <select name="favourite_driver" id="favourite_driver">
@@ -64,15 +64,20 @@ if(isset($_SESSION['user'])){ //if login in session is not set
                         <option value="George Russel">George Russel</option>
                         <option value="Nicholas Latifi">Nicholas Latifi</option>
                     </select>
+
+                    <!-- Avatar Input -->
+                    <input type="file" name="avatar" id="avatar">
+
+
                     <!-- Submit And Register -->
                     <input id="register" type="submit" name="register">
                 </form>
             </div>
-            <div class="login-container">
+            <div class="login_prompt">
                 Already have an account? <a href="login.php">Log In</a> Here!
             </div>
             <!-- Errors occouring while registering will appear here -->
-            <div class="error-container"><?php echo $error ?> </div>
+            <div class="container_error"><?php echo $error ?> </div>
         </div>
     </body>
 </html>

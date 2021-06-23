@@ -14,7 +14,7 @@ if(isset($_SESSION['user'])){
     }
 }else{
     //if the user is not logged in at all, send it straight back to the login page
-    header("Location: ../login.php");
+    header("Location: ../index.php");
 }
 
 ?>
@@ -31,9 +31,9 @@ if(isset($_SESSION['user'])){
 
  
         <!-- Main container -->
-        <div class="container">
+        <div class="container_main">
             <!-- Adding Subcategory Form container -->
-            <div class="form-container">
+            <div class="container_form">
                 <!-- Adding Subcategory Form -->
                 <form action="" method="POST">
                     <!-- Category Input -->
@@ -57,7 +57,7 @@ if(isset($_SESSION['user'])){
                 </form>
             </div>
             <!-- Errors occouring while trying to log in will appear here -->
-            <div class="error-container"><?php echo $error ?> </div>
+            <div class="container_error"><?php echo $error ?> </div>
         </div>
     </body>
 </html>
