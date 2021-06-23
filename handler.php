@@ -365,18 +365,19 @@ function getCategoryTree($conn)
     $sql_get_categories_from_db = "SELECT * FROM categories";
     $result_get_categories_from_db = $conn->query($sql_get_categories_from_db);
     //adding a div to display all teh categories in
-    $cat_div .= "<div class='cats_container'>";
+    $cat_div .= "<div class='container_categories'>";
     //loop through all the categories and show all current categories
     while ($row_get_categories_from_db = $result_get_categories_from_db->fetch_assoc()) {
         //Fill the categories variable and display this for every category found
         $cat_title = $row_get_categories_from_db['cat_title'];
         //adding a div for every categopry
         $cat_div .= "
-        <div class='cat_container'>
-            <div class='cat_header'>
+        <div class='container_category'>
+            <div class='category_header'>
                 <div class='cat_title_container'>" . $cat_title . "</div>
                 <div class='subcat_thread_count_head_container'>Threads</div>
-            </div>";
+            </div>
+            <div class = 'container_subcats'>";
         //preparing query to get all the subcategories
         $sql_get_subcategories_from_db = $conn->prepare("SELECT * FROM categories INNER JOIN subcategories ON subcategories.cat_id = categories.id WHERE categories.cat_title =?");
         $sql_get_subcategories_from_db->bind_param("s", $cat_title);
@@ -387,13 +388,13 @@ function getCategoryTree($conn)
         while ($row_get_subcategories_from_db = $result_get_subcategories_from_db->fetch_assoc()) {
             //place a div inside the category for each subcategory
             $cat_div .= "
-            <div class = 'subcat_container'>
-                <div class = 'subcat_title_container'><a class='subcat_link' href= 'topic.php?cat=" . $row_get_categories_from_db['id'] . "&subcat=" . $row_get_subcategories_from_db['id'] . "'>" . $row_get_subcategories_from_db['subcat_title'] . "</a></div>
+            <div class = 'container_subcat'>
+                <div class = 'subcat_title_container'><div class = 'subcat_read_img_container'><img src='http://localhost/f1-forum/assets/img/forum_read.png'></div><a class='subcat_link' href= 'topic.php?cat=" . $row_get_categories_from_db['id'] . "&subcat=" . $row_get_subcategories_from_db['id'] . "'>" . $row_get_subcategories_from_db['subcat_title'] . "</a></div>
                 <div class = 'subcat_thread_count_container'>" . $row_get_subcategories_from_db['subcat_threads_count'] . "</div>
             </div>";
         }
         $cat_div .= '
-        </div>';
+        </div></div>';
     }
     $cat_div .= "</div><br>";
     //return the div. Echo this function to see the div
@@ -404,7 +405,7 @@ function getThreads($conn, $cat_id, $subcat_id)
     //emptying the threads container div
     $threads_div = "";
     //the outer div for all the threads
-    $threads_div .= "<table class='threads_container_inner'>";
+    $threads_div .= "<div class='container_threads_inner'>";
     //preparing query to get all threads from current subcat
     $sql_get_all_threads_from_subcat = $conn->prepare("SELECT *, threads.id as threadId, users.id as userId, subcategories.id as subcatId, categories.id as catId FROM threads INNER JOIN subcategories ON subcategories.id = threads.subcat_id INNER JOIN categories ON categories.id = threads.cat_id INNER JOIN users ON users.id = threads.author_id WHERE threads.subcat_id = ?");
     $sql_get_all_threads_from_subcat->bind_param("i", $subcat_id);
@@ -412,10 +413,11 @@ function getThreads($conn, $cat_id, $subcat_id)
     $sql_get_all_threads_from_subcat->execute();
     $result_get_all_threads_from_subcat = $sql_get_all_threads_from_subcat->get_result();
     //thread header shows a line where the details of the divs will be
-    $threads_div .= "<tr class='thread_header'>
-                <th class='cat_title_container'>Thread</th>
-                <th class='subcat_thread_count_head_container'>Replies</th>
-            </tr>";
+    $threads_div .= "<div class='threads_header'>
+                <div class='threads_title_container'>Thread</div>
+                <div class='threads_replies_container'>Replies</div>
+            </div>
+            <div class='container_threads'>";
     while ($row_get_all_threads_from_subcat = $result_get_all_threads_from_subcat->fetch_assoc()) {
         //get all variables from the threads from the database
         $thread_title = $row_get_all_threads_from_subcat['title'];
@@ -425,18 +427,18 @@ function getThreads($conn, $cat_id, $subcat_id)
         $username = $row_get_all_threads_from_subcat['username'];
         //for each thread, place a div in the threads_container_inner
         $threads_div .= "
-            <tr class='thread_container'>
-                <td class='thread_left'>
+            <div class='thread_container'>
+                <div class='thread_left'>
                     <a class='thread_link' href='thread.php?thread=" . $thread_id . "&cat=" . $cat_id . "&subcat=". $subcat_id . "'>" . $thread_title . "</a><br>
                     posted by: <span class='author_title'>" . $username . "</span> at " . $time_created . "
-                </td>
-                <td class='thread_right'>
+                </div>
+                <div class='thread_right'>
                     $thread_replies
-                </td>
-            </tr>";
+                </div>
+            </div>";
         //sql query to get all the subcategories
     }
-    $threads_div .= "</table>";
+    $threads_div .= "</div></div>";
     //returning div. Echo this function to see the div
     return $threads_div;
 }

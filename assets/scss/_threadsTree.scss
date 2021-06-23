@@ -1,0 +1,37 @@
+.container_threads_outer{
+    .addtopic_btn{
+
+    }
+    .container_threads_inner{
+        margin-bottom: 4px;
+        padding: 5px;
+        border-radius: 7px;
+        background-image: -webkit-linear-gradient(top, #6ACEFF 0%, #12A3EB 2px, #0076B1 92px, #0076B1 100%);
+        .threads_header, .thread_container{
+            display: flex;
+            justify-content: space-between;
+        }
+        .threads_header{
+            font-family: 'Josefin Sans', sans-serif;
+            color: white;
+            padding: 5px 10px;
+            .threads_title_container{
+
+            }
+            .threads_replies_container{
+
+            }
+        }
+        .container_threads{
+            background-image: -webkit-linear-gradient(top, #D2E0EB 0%, #EEF5F9 100%);
+            .thread_container{
+                .thread_left{
+                    a.thread_link{
+    
+                    }
+                }
+            }
+        }
+        
+    }
+}

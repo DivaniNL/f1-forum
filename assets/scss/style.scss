@@ -6,6 +6,7 @@
 @import 'media';
 body{
     background-color: #333;
+    
     @include respond(mobile) {
         min-width: 0px;        
     }
@@ -25,6 +26,10 @@ body{
         width: 90%;
         //.container_hdr
         @import 'header';
+        //container_categoryTree
+        @import 'categoryTree';
+        //container_threads_outer
+        @import 'threadsTree';
         @include respond(mobile) {
             min-width: 0px;
             width: 90%;

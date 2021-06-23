@@ -29,7 +29,7 @@ if(isset($_SESSION['user'])){
 </head>
 <body>
 <div class="container_main">
-    <div class='container_categories'>
+<div class='container_categoryTree'>
     <?php 
     echo getCategoryTree($conn);
      ?>
