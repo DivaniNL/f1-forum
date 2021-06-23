@@ -442,6 +442,7 @@ function getThreads($conn, $cat_id, $subcat_id)
     //returning div. Echo this function to see the div
     return $threads_div;
 }
+//add footer
 function getReplies($conn, $cat_id, $subcat_id, $thread_id)
 {
     //emptying the replies div container
