@@ -8,9 +8,13 @@ if(isset($_GET['subcat'])){
 if(isset($_GET['thread'])){
     $thread_id = $_GET['thread'];
 }
+
+
+
+if (!isset($_SESSION['user'])) {
+    header('Location: thread.php?thread='.$thread_id.'&cat='.$cat_id.'&subcat='.$subcat_id);
+}
 include "handler.php";
-
-
 
 ?>
 
@@ -26,6 +30,7 @@ include "handler.php";
 </head>
 <body>
 <div class="container_main">
+<?php include 'header.php';?>
     <!-- Outer div of the reply page -->
     <div class="reply_page_container_outer">
         <h2>Reply to <?php echo showThreadHeader($conn, $cat_id, $subcat_id, $thread_id) ?></h2>

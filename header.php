@@ -1,11 +1,19 @@
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1-Forum</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
 <div class="container_hdr">
     <ul class="hdr_left">
         <li class='hdr_container_logo'>
             <img class='hdr_logo' src="assets/img/logo.png" alt="F1-Forum-logo">
         </li>
         <li class='hdr_container_text'>
-            <h1>F1-Forum</h1>
-            <p>Het nieuwste Nederlandse Formule 1 forum!</p>
+            <h1 class="hdr_txt_h1">F1-Forum</h1>
+            <p class="hdr_txt_p">Het nieuwste Nederlandse Formule 1 forum!</p>
         </li>
     </ul>
     <ul class = "hdr_right">

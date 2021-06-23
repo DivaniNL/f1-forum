@@ -488,6 +488,26 @@ function showThreadHeader($conn, $cat_id, $subcat_id, $thread_id)
     //this function returns the thread's title. Echo this function on thread.php to see the title of the thread
     return $thread_title;
 }
+
+function showTopicFamily($conn, $cat_id, $subcat_id)
+{
+    //prepare query to get thread family
+    $sql_get_thread_family = $conn->prepare("SELECT * FROM categories INNER JOIN subcategories ON subcategories.cat_id = categories.id WHERE subcategories.id=?");
+    $sql_get_thread_family->bind_param("i", $subcat_id);
+    //get thread family
+    $sql_get_thread_family->execute();
+    $result_get_thread_family = $sql_get_thread_family->get_result();
+    $row_get_thread_family = $result_get_thread_family->fetch_assoc();
+    //assigning the title of the current thread to $thread_title
+    $thread_title = $row_get_thread_family['thread_title'];
+    //assigning the subcategory name which this thread is placed under to $subcat_title
+    $subcat_title = $row_get_thread_family['subcat_title'];
+    //assigning the category name which this thread is placed under to $cat_title
+    $cat_title = $row_get_thread_family['cat_title'];
+    //this function returns the thread's title. Echo this function on thread.php to see the title of the thread
+    return "<p><a href='index.php'>HOME</a> -> <a href='topic.php?cat=" . $cat_id . "&subcat=" . $subcat_id . "'>".$subcat_title."</a></p>";
+}
+
 function showThreadFamily($conn, $cat_id, $subcat_id, $thread_id)
 {
     //prepare query to get thread family
