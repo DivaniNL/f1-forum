@@ -442,7 +442,19 @@ function getThreads($conn, $cat_id, $subcat_id)
     //returning div. Echo this function to see the div
     return $threads_div;
 }
-//add footer
+
+/
+///
+///////
+//////////////
+// add footer
+// get latest reply and inside loop getThreads for each thread get date time and user from most recent reply
+//////////////
+///////
+///
+/
+
+
 function getReplies($conn, $cat_id, $subcat_id, $thread_id)
 {
     //emptying the replies div container
