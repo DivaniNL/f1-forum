@@ -2,6 +2,35 @@
     .addtopic_btn{
 
     }
+    .topic_family{
+        background-color: #CADCEB;
+        border-radius: 7px;
+        font-size: 1.1em;
+        line-height: 2.2em;
+        list-style-type: none;
+        margin-bottom: 15px;
+        padding: 3px 15px;
+        color: #105289;
+        .family_part{
+            color: #105289;
+            text-decoration: none;
+            white-space: nowrap;
+            &:hover{
+                text-decoration: underline;
+                color: #D31141;
+            }
+        }
+        .chvr_needed{
+            &:after {
+                content: '\276F';
+                font-weight: bold;
+                padding: 0 0.5em;
+            }
+        }
+        @include respond(mobile){
+            font-size: 14px;
+        }
+    }
     .container_threads_inner{
         margin-bottom: 4px;
         padding: 5px;
@@ -10,25 +39,116 @@
         .threads_header, .thread_container{
             display: flex;
             justify-content: space-between;
+            align-items: center;
+            
         }
         .threads_header{
             font-family: 'Josefin Sans', sans-serif;
             color: white;
             padding: 5px 10px;
-            .threads_title_container{
-
+            .threads_replies_container, .threads_latest_reply_info_container{
+                flex: 1;
+            }
+            .threads_info_container{
+                flex: 2;
+                @include respond(mobile){
+                    flex: 1;
+                }
             }
             .threads_replies_container{
 
+                text-align: center;
+                @include respond(mobile) {
+                    display: none;
+                }
+            }
+            .threads_latest_reply_info_container{
+                @include respond(mobile){
+                    flex: 1;
+                }
             }
         }
         .container_threads{
             background-image: -webkit-linear-gradient(top, #D2E0EB 0%, #EEF5F9 100%);
+            
             .thread_container{
-                .thread_left{
-                    a.thread_link{
-    
+                border-top: 1px solid #FFFFFF;
+                border-bottom: 1px solid #00608F;
+                padding-left: 10px;
+                padding-right: 10px;
+                color: #4C5D77;
+                display: flex;
+                height: 55px;
+                .thread_info_container, .thread_reply_count_container, .thread_latest_reply_info_container{
+                    border-left-color: #FFFFFF;
+                }
+                .thread_info_container{
+                    display: flex;
+                    align-items: center;
+                    flex: 2;
+
+                    font-size: 16px;
+                    font-weight: 500;
+                    font-family: "Trebuchet MS", Helvetica, Arial, Sans-serif;
+                   
+                    .thread_img_container{
+                        padding: 10px;
+                        flex: 1;
+                        img{
+                            width: 55%;
+                        }
+                        @include respond(mobile){
+                            display: none;
+                        }
                     }
+                    .thread_info{
+                        flex: 8;
+                        color: #4C5D77;
+                        font-family: Verdana, Helvetica, Arial, sans-serif;
+                        font-size: 0.7em;
+                        a.thread_link{
+                            color: #105289;
+                            text-decoration: none;
+                            font-size: 16px;
+                            font-weight: 500;
+                            font-family: "Trebuchet MS",Helvetica,Arial,Sans-serif;
+                        }
+                        .author_date_time{
+                            font-size: 1em;
+                            
+                        }
+                        .username{
+                            color: #D31141;
+                        }
+                    }
+                    @include respond(mobile){
+                        flex: 1;
+
+                    }
+                }
+                .thread_reply_count_container{
+                    text-align: center;
+                    flex: 1;
+                    @include respond(mobile){
+                        display: none;
+                    }
+                    
+                }
+                .thread_latest_reply_info_container{
+                    color: #4C5D77;
+                    font-family: Verdana, Helvetica, Arial, sans-serif;
+                    font-size: 0.7em;
+                    flex: 1;
+                    .username{
+                        color: #D31141;
+                    }
+                    @include respond(mobile){
+                        flex: 1;
+                        margin-left: 10px;
+                    }
+                }
+                @include respond(mobile){
+                    height: 95px;
                 }
             }
         }

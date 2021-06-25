@@ -32,7 +32,8 @@ body{
         @import 'threadsTree';
         @include respond(mobile) {
             min-width: 0px;
-            width: 90%;
+            width: 95%;
+            padding: 10px;
         }
         @include respond(tablet) {
             min-width: 0px;

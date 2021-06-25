@@ -19,14 +19,14 @@
     <ul class = "hdr_right">
         <?php 
             if(isset($_SESSION['user'])){ //if login in session is not set
-                echo "<li class='auth_box a_1'><a onclick='logOut();'>Log out&nbsp;<i class='fa-power-off fa'></i></a></li>";
+                echo "<li class='auth_box a_1'><a onclick='logOut();'>Afmelden&nbsp;<i class='fa-power-off fa'></i></a></li>";
             }
             else{
-                echo "<li class='auth_box a_3'><a href='login.php'>Login&nbsp;<i class=' fa-power-off fa'></i></a></li><li class='auth_box a_2'><a href='register.php'>Register&nbsp;<i class='fa-pencil-square-o fa'></i></a></li>";
+                echo "<li class='auth_box a_3'><a href='login.php'>Inloggen&nbsp;<i class=' fa-power-off fa'></i></a></li><li class='auth_box a_2'><a href='register.php'>Registeren&nbsp;<i class='fa-pencil-square-o fa'></i></a></li>";
             }
             if(isset($_SESSION['user'])){
                 if($_SESSION['user']['logged_in_as'] == "admin"){
-                    echo "<li class='auth_box a_4'><a href='back/index.php'>Admin&nbsp;<i class='fa-user fa'></i></a></li>";
+                    echo "<li class='auth_box a_4'><a href='back/index.php'>Beheerder&nbsp;<i class='fa-user fa'></i></a></li>";
                 }
             }
         ?>
@@ -38,4 +38,10 @@ function logOut() {
     window.location = "logOut.php";
     return false;
 }
+var hdr_right = $('.hdr_right');
+
+
+if(hdr_right.children().length == 1) {
+    hdr_right.addClass('onechild');
+} 
 </script>

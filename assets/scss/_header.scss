@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@500&display=swap');
-
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 .container_hdr{
     width: 100%;
     font-family: 'Josefin Sans', sans-serif;
@@ -15,8 +19,7 @@
         box-sizing: border-box;
     }
     ul.hdr_left{
-        
-        width: 75%;
+        flex: 1;
         display: inline-flex;
         
         .hdr_container_logo{
@@ -38,7 +41,7 @@
             }
             @include respond(tablet) {
                 height: 100%;
-                width: 50%;
+
             }
             @include respond(mobile) {
                 width: 46%;
@@ -83,7 +86,7 @@
             
         }
         @include respond(tablet) {
-            width: 50%;
+           
             display: inline-flex;
         }
         @include respond(mobile) {
@@ -96,8 +99,11 @@
         
     }
     ul.hdr_right{
-        width: 25%;
+        flex: 1;
         position: relative;
+        display: inline-flex;
+        flex-direction: row-reverse;
+
         .auth_box{
             display: inline-flex;
             flex-direction: column;
@@ -138,28 +144,26 @@
                 }
             }
             @include respond(tablet) {
-                width: 85%;
+                
             }
             @include respond(mobile) {
                 display: inline-block;
-                width: 55%;
+                flex: 1;
                 margin-left: 5px;
                 font-size: 0.8em;
                 margin-right: 5px;
                 padding: 4px;
 
             }
-            &:only-child{
-                width: 60%;
-            }
         }
+        
         .logout_box{
         }
         @include respond(header_slice){
-            width: 35%;
+            
         }
         @include respond(tablet) {
-            width: 50%;
+            
             display: flex;
         }
         @include respond(mobile) {
@@ -169,6 +173,7 @@
         }
 
     }
+
     @include respond(mobile) {
 
         display: block;
@@ -176,4 +181,7 @@
         height: auto;
         padding-bottom: 15px;
     }
+}
+.onechild{
+    flex: 0.16 !important;
 }

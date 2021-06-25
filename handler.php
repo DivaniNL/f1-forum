@@ -375,7 +375,7 @@ function getCategoryTree($conn)
         <div class='container_category'>
             <div class='category_header'>
                 <div class='cat_title_container'>" . $cat_title . "</div>
-                <div class='subcat_thread_count_head_container'>Threads</div>
+                <div class='subcat_thread_count_head_container'>Onderwerpen</div>
             </div>
             <div class = 'container_subcats'>";
         //preparing query to get all the subcategories
@@ -414,26 +414,46 @@ function getThreads($conn, $cat_id, $subcat_id)
     $result_get_all_threads_from_subcat = $sql_get_all_threads_from_subcat->get_result();
     //thread header shows a line where the details of the divs will be
     $threads_div .= "<div class='threads_header'>
-                <div class='threads_title_container'>Thread</div>
-                <div class='threads_replies_container'>Replies</div>
+                <div class='threads_info_container'>Onderwerpen</div>
+                <div class='threads_replies_container'>Reacties</div>
+                <div class='threads_latest_reply_info_container'>Laatste bericht</div>
             </div>
             <div class='container_threads'>";
     while ($row_get_all_threads_from_subcat = $result_get_all_threads_from_subcat->fetch_assoc()) {
+        //preparing query to get user info, reply info and thread infor from most recent reply from every post
+        $sql_get_replies_from_thread = $conn->prepare("SELECT *, threads.id as threadId, users.id as userId FROM threads INNER JOIN replies ON replies.thread_id = threads.id INNER JOIN users ON users.id = threads.author_id WHERE threads.id = ? ORDER BY replies.date_time DESC LIMIT 1");
+        $sql_get_replies_from_thread->bind_param('i', $thread_id);
+        $thread_id = $row_get_all_threads_from_subcat['threadId'];
+        //get user info, reply info and thread infor from most recent reply from every post
+        $sql_get_replies_from_thread->execute();
+        $result_get_replies_from_thread = $sql_get_replies_from_thread->get_result();
+        $row_get_replies_from_thread = $result_get_replies_from_thread->fetch_assoc();
+        $date_time_latest_reply = $row_get_replies_from_thread['date_time'];
+        $username_latest_reply = $row_get_replies_from_thread['username'];
         //get all variables from the threads from the database
         $thread_title = $row_get_all_threads_from_subcat['title'];
         $thread_replies = $row_get_all_threads_from_subcat['replies'];
         $time_created = $row_get_all_threads_from_subcat['time_created'];
-        $thread_id = $row_get_all_threads_from_subcat['threadId'];
+
         $username = $row_get_all_threads_from_subcat['username'];
+        ////query to get information from latest post
         //for each thread, place a div in the threads_container_inner
         $threads_div .= "
             <div class='thread_container'>
-                <div class='thread_left'>
-                    <a class='thread_link' href='thread.php?thread=" . $thread_id . "&cat=" . $cat_id . "&subcat=". $subcat_id . "'>" . $thread_title . "</a><br>
-                    posted by: <span class='author_title'>" . $username . "</span> at " . $time_created . "
+            
+                <div class='thread_info_container'>
+                    <div class = 'thread_img_container'>
+                        <img src='http://localhost/f1-forum/assets/img/forum_read.png'>
+                    </div>
+                    <div class='thread_info'>
+                        <a class='thread_link' href='thread.php?thread=" . $thread_id . "&cat=" . $cat_id . "&subcat=". $subcat_id . "'>" . $thread_title . "</a><br>
+                        <span class='author_date_time'>door: <span class='username'>" . $username . "</span> op:" . $time_created . "</span>
+                    </div>
                 </div>
-                <div class='thread_right'>
-                    $thread_replies
+                <div class='thread_reply_count_container'>".$thread_replies."
+                </div>
+                <div class='thread_latest_reply_info_container'>door: <span class='username'>".$username_latest_reply."</span> <br>
+                    ".$date_time_latest_reply."
                 </div>
             </div>";
         //sql query to get all the subcategories
@@ -443,16 +463,16 @@ function getThreads($conn, $cat_id, $subcat_id)
     return $threads_div;
 }
 
-/
-///
+//
+////
 ///////
 //////////////
 // add footer
 // get latest reply and inside loop getThreads for each thread get date time and user from most recent reply
 //////////////
 ///////
-///
-/
+////
+//
 
 
 function getReplies($conn, $cat_id, $subcat_id, $thread_id)
@@ -501,20 +521,17 @@ function showThreadHeader($conn, $cat_id, $subcat_id, $thread_id)
 
 function showTopicFamily($conn, $cat_id, $subcat_id)
 {
-    //prepare query to get thread family
-    $sql_get_thread_family = $conn->prepare("SELECT * FROM categories INNER JOIN subcategories ON subcategories.cat_id = categories.id WHERE subcategories.id=?");
-    $sql_get_thread_family->bind_param("i", $subcat_id);
-    //get thread family
-    $sql_get_thread_family->execute();
-    $result_get_thread_family = $sql_get_thread_family->get_result();
-    $row_get_thread_family = $result_get_thread_family->fetch_assoc();
-    //assigning the title of the current thread to $thread_title
+    //prepare query to get topic family with the arrows
+    $sql_get_topic_family = $conn->prepare("SELECT * FROM categories INNER JOIN subcategories ON subcategories.cat_id = categories.id WHERE subcategories.id=?");
+    $sql_get_topic_family->bind_param("i", $subcat_id);
+    //get topic family
+    $sql_get_topic_family->execute();
+    $result_get_topic_family = $sql_get_topic_family->get_result();
+    $row_get_topic_family = $result_get_topic_family->fetch_assoc();
     //assigning the subcategory name which this thread is placed under to $subcat_title
-    $subcat_title = $row_get_thread_family['subcat_title'];
-    //assigning the category name which this thread is placed under to $cat_title
-    $cat_title = $row_get_thread_family['cat_title'];
-    //this function returns the thread's title. Echo this function on thread.php to see the title of the thread
-    return "<p><a href='index.php'>HOME</a> -> <a href='topic.php?cat=" . $cat_id . "&subcat=" . $subcat_id . "'>".$subcat_title."</a></p>";
+    $subcat_title = $row_get_topic_family['subcat_title'];
+    //this function returns the topic's title. Echo this function on thread.php to see the title of the thread
+    return "<div class='family topic_family'><a class='family_part' href='index.php'>Forumoverzicht</a><span class='chvr_needed'></span> <a class='family_part'  href='topic.php?cat=" . $cat_id . "&subcat=" . $subcat_id . "'>".$subcat_title."</a></div>";
 }
 
 function showThreadFamily($conn, $cat_id, $subcat_id, $thread_id)
@@ -530,10 +547,8 @@ function showThreadFamily($conn, $cat_id, $subcat_id, $thread_id)
     $thread_title = $row_get_thread_family['thread_title'];
     //assigning the subcategory name which this thread is placed under to $subcat_title
     $subcat_title = $row_get_thread_family['subcat_title'];
-    //assigning the category name which this thread is placed under to $cat_title
-    $cat_title = $row_get_thread_family['cat_title'];
     //this function returns the thread's title. Echo this function on thread.php to see the title of the thread
-    return "<p><a href='index.php'>HOME</a> -> <a href='topic.php?cat=" . $cat_id . "&subcat=" . $subcat_id . "'>".$subcat_title."</a> -> <a href='thread.php?thread=" . $thread_id . "&cat=" . $cat_id . "&subcat=". $subcat_id . "'>".$thread_title. "</a></p>";
+    return "<p><a href='index.php'>Forumoverzicht</a>  <a href='topic.php?cat=" . $cat_id . "&subcat=" . $subcat_id . "'>".$subcat_title."</a> -> <a href='thread.php?thread=" . $thread_id . "&cat=" . $cat_id . "&subcat=". $subcat_id . "'>".$thread_title. "</a></p>";
 }
 function showSubcatHeader($conn, $subcat_id)
 {
