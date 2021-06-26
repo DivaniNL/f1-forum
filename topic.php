@@ -34,8 +34,9 @@ if(isset($_GET['subcat'])){
     
 
     echo getThreads($conn, $cat_id, $subcat_id);
-     ?>
-     </div>
+    ?>
+    </div>
+    <?php include 'footer.php';?>
 </div>
 </body>
 </html>

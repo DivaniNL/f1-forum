@@ -32,7 +32,7 @@ include "handler.php";
 </head>
 <body>
 <div class="container_main">
-<?php include 'header.php';?>
+    <?php include 'header.php';?>
     <!-- Outer div of the reply page -->
     <div class="reply_page_container_outer">
         <h2>Reply to <?php echo showThreadHeader($conn, $cat_id, $subcat_id, $thread_id) ?></h2>
@@ -54,6 +54,7 @@ include "handler.php";
 
         </div>
     </div>
+    <?php include 'footer.php';?>
 </div>
 </body>
 </html>

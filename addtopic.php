@@ -67,6 +67,7 @@ include "handler.php";
         </div>
         <!-- Errors occouring while registering will appear here -->
         <div class="container_error"><?php echo $error ?> </div>
+        <?php include 'footer.php';?>
     </div>
 </body>
 </html>

@@ -5,6 +5,9 @@
 }
 @import 'media';
 body{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
     background-color: #333;
     
     @include respond(mobile) {
@@ -30,6 +33,7 @@ body{
         @import 'categoryTree';
         //container_threads_outer
         @import 'threadsTree';
+       
         @include respond(mobile) {
             min-width: 0px;
             width: 95%;
@@ -40,4 +44,6 @@ body{
             width: 90%;   
         }
     }
+     //container_ftr
+        @import 'footer';
 }

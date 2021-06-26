@@ -396,7 +396,7 @@ function getCategoryTree($conn)
         $cat_div .= '
         </div></div>';
     }
-    $cat_div .= "</div><br>";
+    $cat_div .= "</div>";
     //return the div. Echo this function to see the div
     return $cat_div;
 }

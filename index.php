@@ -11,6 +11,8 @@ include "handler.php";
         <div class='container_categoryTree'>
             <?php echo getCategoryTree($conn);?>
         </div>
+        <?php include 'footer.php';?>
     </div>
+    
 </body>
 </html>

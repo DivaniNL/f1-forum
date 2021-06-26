@@ -39,8 +39,9 @@ if(isset($_GET['thread'])){
     
 
     echo getReplies($conn, $cat_id, $subcat_id, $thread_id);
-     ?>
-     </div>
+    ?>
+    </div>
+    <?php include 'footer.php';?>
 </div>
 </body>
 </html>
