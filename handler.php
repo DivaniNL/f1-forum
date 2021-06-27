@@ -492,7 +492,12 @@ function getReplies($conn, $cat_id, $subcat_id, $thread_id)
         $replies_div .= "<div class='container_reply'>";
             //user info
             $username = $row_get_replies_and_user_info_from_db['username'];
-            $avatar = $row_get_replies_and_user_info_from_db['avatar'];
+            if($row_get_replies_and_user_info_from_db['avatar'] != ""){
+                $avatar = $row_get_replies_and_user_info_from_db['avatar'];
+            }else{
+                $avatar = "_avatar_default.png";
+            }
+            
             $favourite_driver = $row_get_replies_and_user_info_from_db['favourite_driver'];
             $posts_made = $row_get_replies_and_user_info_from_db['threads_count'];
             //post info
