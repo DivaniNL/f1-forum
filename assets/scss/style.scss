@@ -29,11 +29,12 @@ body{
         width: 90%;
         //.container_hdr
         @import 'header';
-        //container_categoryTree
-        @import 'categoryTree';
-        //container_threads_outer
-        @import 'threadsTree';
-       
+        //container_categories
+        @import 'categories';
+        //container_threads
+        @import 'threads';
+        //container_thread
+        @import 'thread';
         @include respond(mobile) {
             min-width: 0px;
             width: 95%;

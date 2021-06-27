@@ -45,7 +45,7 @@ if(!empty($_POST["send"])) {
                     <textarea name="content" id="content" class="contact_me_input_box" rows="3"></textarea>
                 </div>
                 <div class='submit'>
-                    <input type="submit" name="send" value="Send" class="button_submit" />
+                    <button type="submit" name="send" value="Send" class="button_submit" >Send</button>
                 </div>
             </form>
             <div id="loader-icon" style="display: none;">
@@ -54,3 +54,8 @@ if(!empty($_POST["send"])) {
         </div>
     </div>
 </div>
+<script>
+if ( window.history.replaceState ) {
+  window.history.replaceState( null, null, window.location.href );
+}
+</script>

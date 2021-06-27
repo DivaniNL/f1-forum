@@ -23,10 +23,10 @@ if(isset($_GET['subcat'])){
 <body>
 <div class="container_main">
 <?php include 'header.php';?>
-    <div class='container_threads_outer'>
+    <div class='container_threads'>
     <?php echo showTopicFamily($conn, $cat_id, $subcat_id) ?>
     <?php if(isset($_SESSION['user'])){ 
-    echo '<button class="addtopic_btn"> <a href="addtopic.php?cat='.$cat_id.'&subcat='.$subcat_id.'">Add a Topic</a></button>';
+    echo '<button class="addtopic_btn"> <a href="new_thread.php?cat='.$cat_id.'&subcat='.$subcat_id.'">Add a Topic</a></button>';
     }
     ?> 
     <?php 

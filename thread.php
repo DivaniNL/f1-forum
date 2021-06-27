@@ -27,11 +27,11 @@ if(isset($_GET['thread'])){
 <body>
 <div class="container_main">
 <?php include 'header.php';?>
-    <div class='replies_container_outer'>
+    <div class='container_thread'>
     <!-- Get full directory -->
     <?php echo showThreadFamily($conn, $cat_id, $subcat_id, $thread_id) ?>
     <?php if(isset($_SESSION['user'])){ 
-        echo"<button class='reply_btn'> <a href='reply.php?thread=".$thread_id."&cat=".$cat_id."&subcat=".$subcat_id."'>Reply</a></button>";
+        echo"<button class='reply_btn'> <a href='reply.php?thread=".$thread_id."&cat=".$cat_id."&subcat=".$subcat_id."'>Regeer op dit onderwerp</a></button>";
     }
     ?>
     <?php 

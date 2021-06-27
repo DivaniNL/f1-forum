@@ -241,7 +241,7 @@ if (isset($_POST['newthread'])) {
     //preparing query to insert thread info in the threads table
     $sql_insert_thread_threads = $conn->prepare("INSERT INTO `threads`(title, author_id, cat_id, subcat_id, `replies`, views, time_created) VALUES(?,?,?,?,?,?,?)");
     $sql_insert_thread_threads->bind_param("siiiiis", $post_thread_title, $author_id, $cat_id, $subcat_id, $replies, $views, $time_created);
-    //getting the post values from the form at addtopic.php
+    //getting the post values from the form at addsubcategory.php
     $post_username = $_POST['username'];
     $post_firstname = $_POST['firstname'];
     $post_lastname = $_POST['lastname'];
@@ -295,7 +295,7 @@ if (isset($_POST['newthread'])) {
                 //update thread count in the subcategories table
                 if ($sql_update_subcat_threads_count->execute()) {
                     //if the thread count is updated in subcategories table
-                    header("Location: topic.php?cat=".$cat_id."&subcat=".$subcat_id."");
+                    header("Location: subcategory.php?cat=".$cat_id."&subcat=".$subcat_id."");
                 } else {
                     $error .= "Er is iets misgegaan: Errorcode[144]";
                 }
@@ -318,7 +318,7 @@ if (isset($_POST['newthread'])) {
 //function when a new reply is submitted
 if (isset($_POST['newreply'])) {
     //preparing query to insert thread info in the threads table
-    //getting the post values from the form at addtopic.php
+    //getting the post values from the form at addsubcategory.php
     $thread_id = $_POST['thread_id'];
     $post_body = $_POST['post_body'];
     $author_id = $_SESSION['user']['ID'];
@@ -389,7 +389,7 @@ function getCategoryTree($conn)
             //place a div inside the category for each subcategory
             $cat_div .= "
             <div class = 'container_subcat'>
-                <div class = 'subcat_title_container'><div class = 'subcat_read_img_container'><img src='http://localhost/f1-forum/assets/img/forum_read.png'></div><a class='subcat_link' href= 'topic.php?cat=" . $row_get_categories_from_db['id'] . "&subcat=" . $row_get_subcategories_from_db['id'] . "'>" . $row_get_subcategories_from_db['subcat_title'] . "</a></div>
+                <div class = 'subcat_title_container'><div class = 'subcat_read_img_container'><img src='http://localhost/f1-forum/assets/img/forum_read.png'></div><a class='subcat_link' href= 'subcategory.php?cat=" . $row_get_categories_from_db['id'] . "&subcat=" . $row_get_subcategories_from_db['id'] . "'>" . $row_get_subcategories_from_db['subcat_title'] . "</a></div>
                 <div class = 'subcat_thread_count_container'>" . $row_get_subcategories_from_db['subcat_threads_count'] . "</div>
             </div>";
         }
@@ -474,13 +474,13 @@ function getThreads($conn, $cat_id, $subcat_id)
 ////
 //
 
-
+///get  headder
 function getReplies($conn, $cat_id, $subcat_id, $thread_id)
 {
     //emptying the replies div container
     $replies_div = "";
     //the outer div for all replies
-    $replies_div.= "<div class='replies_container_inner'>";
+    $replies_div.= "<div class='container_replies'>";
     //prepare query to get all replies and user info
     $sql_get_replies_and_user_info_from_db = $conn->prepare("SELECT * FROM replies INNER JOIN users ON users.id = replies.user_id INNER JOIN threads ON threads.id = replies.thread_id WHERE threads.id=?");
     $sql_get_replies_and_user_info_from_db->bind_param("i", $thread_id);
@@ -489,15 +489,45 @@ function getReplies($conn, $cat_id, $subcat_id, $thread_id)
     $result_get_replies_and_user_info_from_db = $sql_get_replies_and_user_info_from_db->get_result();
     while ($row_get_replies_and_user_info_from_db = $result_get_replies_and_user_info_from_db->fetch_assoc()) {
         //for each reply for the current thread, make a div
-        $replies_div .= "<div class='reply_container'>";
-        $post_body = $row_get_replies_and_user_info_from_db['post_body'];
-        $username = $row_get_replies_and_user_info_from_db['username'];
-        $avatar = $row_get_replies_and_user_info_from_db['avatar'];
-        $replies_div .= "<h1>Username: ".$username."</h1><br>";
-        $replies_div .= "<img src='assets/avatars/".$avatar."'><br>";
-        $replies_div .= "<p>Post: ".$post_body."</p><br>";
+        $replies_div .= "<div class='container_reply'>";
+            //user info
+            $username = $row_get_replies_and_user_info_from_db['username'];
+            $avatar = $row_get_replies_and_user_info_from_db['avatar'];
+            $favourite_driver = $row_get_replies_and_user_info_from_db['favourite_driver'];
+            $posts_made = $row_get_replies_and_user_info_from_db['threads_count'];
+            //post info
+            $reply_date_time = $row_get_replies_and_user_info_from_db['date_time'];
+            $post_body = $row_get_replies_and_user_info_from_db['post_body'];
+            $reply_user = $row_get_replies_and_user_info_from_db['user_id'];
+            $author_thread = $row_get_replies_and_user_info_from_db['author_id'];
 
-        $replies_div .= "</div'>";
+            $replies_div .= "<div class='reply_user_info'>";
+                ///name favourite driver avatar admin posts made
+                $replies_div .= "<div class='user_username'>".$username."</div>";
+                $replies_div .= "<div class='user_favourite_driver'>".$favourite_driver."</div>";         
+                $replies_div .= "<div class='user_avatar_container'><img class='user_avatar' src='assets/avatars/".$avatar."'></div>";
+                if($row_get_replies_and_user_info_from_db['admin'] === 0){
+                    $replies_div .= "<div class='user_role'><span class='visitor'>Gebruiker</span></div>";         
+                }elseif ($row_get_replies_and_user_info_from_db['admin'] === 1) {
+                    $replies_div .= "<div class='user_role'><span class='admin'>Beheerder</span></div>";         
+                }
+                $replies_div .= "<div class='user_posts_made'>".$posts_made." onderwerpen gestart</div>";
+
+            $replies_div .= "</div>";
+            $replies_div .= "<div class='reply_post_body'>";
+                $replies_div .= "<div class='post_info'>";
+                    $replies_div .= "<div class = 'post_body_datetime_container'>Geplaatst op ".$reply_date_time."</div>";
+                    if($reply_user == $author_thread){
+                        $replies_div .= "<div class='is_author'><span class='author'>Auteur</span></div>";  
+                        $replies_div .= "</div>";
+                        $replies_div .= "<div class = 'reply_author post_body_post'>".$post_body."</div>";
+                    }else{
+                        $replies_div .= "</div>";
+                        $replies_div .= "<div class = 'post_body_post'>".$post_body."</div>";
+                    }
+                
+            $replies_div .= "</div>";   
+        $replies_div .= "</div>";   
     }
     $replies_div .= "</div>";
 
@@ -531,7 +561,7 @@ function showTopicFamily($conn, $cat_id, $subcat_id)
     //assigning the subcategory name which this thread is placed under to $subcat_title
     $subcat_title = $row_get_topic_family['subcat_title'];
     //this function returns the topic's title. Echo this function on thread.php to see the title of the thread
-    return "<div class='family topic_family'><a class='family_part' href='index.php'>Forumoverzicht</a><span class='chvr_needed'></span> <a class='family_part'  href='topic.php?cat=" . $cat_id . "&subcat=" . $subcat_id . "'>".$subcat_title."</a></div>";
+    return "<div class='family topic_family'><a class='family_part' href='index.php'>Forumoverzicht</a><span class='chvr_needed'></span> <a class='family_part'  href='subcategory.php?cat=" . $cat_id . "&subcat=" . $subcat_id . "'>".$subcat_title."</a></div>";
 }
 
 function showThreadFamily($conn, $cat_id, $subcat_id, $thread_id)
@@ -548,7 +578,7 @@ function showThreadFamily($conn, $cat_id, $subcat_id, $thread_id)
     //assigning the subcategory name which this thread is placed under to $subcat_title
     $subcat_title = $row_get_thread_family['subcat_title'];
     //this function returns the thread's title. Echo this function on thread.php to see the title of the thread
-    return "<p><a href='index.php'>Forumoverzicht</a>  <a href='topic.php?cat=" . $cat_id . "&subcat=" . $subcat_id . "'>".$subcat_title."</a> -> <a href='thread.php?thread=" . $thread_id . "&cat=" . $cat_id . "&subcat=". $subcat_id . "'>".$thread_title. "</a></p>";
+    return "<div class='family thread_family'><a class='family_part' href='index.php'>Forumoverzicht</a><span class='chvr_needed'></span>  <a class='family_part'href='subcategory.php?cat=" . $cat_id . "&subcat=" . $subcat_id . "'>".$subcat_title."</a><span class='chvr_needed'></span>  <a class='family_part' href='thread.php?thread=" . $thread_id . "&cat=" . $cat_id . "&subcat=". $subcat_id . "'>".$thread_title. "</a></div>";
 }
 function showSubcatHeader($conn, $subcat_id)
 {
@@ -561,7 +591,7 @@ function showSubcatHeader($conn, $subcat_id)
     $row_get_categories_from_db = $result_get_all_categories_from_db->fetch_assoc();
     //assigning the title of the current subcategory to $subcat_title
     $subcat_title = $row_get_categories_from_db['subcat_title'];
-    //this function returns the subcategory's title. Echo this function on topic.php to see the title of the subcategory
+    //this function returns the subcategory's title. Echo this function on subcategory.php to see the title of the subcategory
     return $subcat_title;
 }
 

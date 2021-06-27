@@ -9,7 +9,7 @@ if(isset($_GET['subcat'])){
 }
 
 if (empty($_SESSION['user'])) {
-    header("Location: topic.php?cat=".$cat_id."&subcat=".$subcat_id."");
+    header("Location: subcategory.php?cat=".$cat_id."&subcat=".$subcat_id."");
 }
 
 include "handler.php";

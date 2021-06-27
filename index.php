@@ -8,9 +8,7 @@ include "handler.php";
 <body>
     <div class="container_main">
         <?php include 'header.php';?>
-        <div class='container_categoryTree'>
-            <?php echo getCategoryTree($conn);?>
-        </div>
+        <?php echo getCategoryTree($conn);?>
         <?php include 'footer.php';?>
     </div>
     
