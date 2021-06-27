@@ -106,7 +106,7 @@
                     background-image: -webkit-linear-gradient(bottom, #41c0ff 0%, #0076B1 1px, #12A3EB 19px, #12A3EB 100%);
                     color: white;
                     border-radius: 7px;
-                    padding: 5px 20px;
+                    padding: 2.5px 10px;
                 }
                 .user_avatar_container{
                     width: 40%;
@@ -123,17 +123,17 @@
                     margin: 5px 0px 5px 0px;
                     span.visitor{
                         background-image: -webkit-linear-gradient(bottom, #41c0ff 0%, #0076B1 1px, #12A3EB 19px, #12A3EB 100%);          
-                        padding: 5px 20px;
+                        padding: 2.5px 10px;
                         border-radius: 7px;
                     }
                     span.admin{
                         background-image: -webkit-linear-gradient(bottom, #ff4141 0%, #b10000 1px, #eb1212 19px, #eb1212 100%);          
-                        padding: 5px 20px;
+                        padding: 2.5px 10px;
                         border-radius: 7px;
                     }
                 }
                 .user_posts_made{
-
+                    font-size: 0.7em;
                 }
                 @include respond(tablet){
                     width: 100%;
@@ -158,10 +158,11 @@
                     .is_author{
                         margin-top: 10px;
                         margin-bottom: 20px;
+
                         width: 25%;
                         span.author{
                             background-image: -webkit-linear-gradient(bottom, #ffc341 0%, #b18200 1px, #eb8d12 19px, #eb9812 100%);          
-                            padding: 5px 20px;
+                            padding: 2.5px 10px;
                             border-radius: 7px;
                             color: white;
                         }
@@ -170,19 +171,29 @@
                         }
                     }
                     .post_body_datetime_container, .is_author{
-                        text-align: center;
+                        text-align: left;
+                        font-size: 0.7em;
                         display: inline-block;
+                        margin-top: 10px;
                     }
                     @include respond(tablet){
                         width: 100%;
-                        display: flex;
-                        flex-wrap: wrap;
+                        width: 100% !important;
+                        margin-left: 5%;
                     }
                 }
                 
                 .post_body_post{
-                    padding: 10px 0px 0px 10px;
+                    padding: 10px;
+                    width: 95%;
+                    border-radius: 7px;
+                    background-color: rgb(255, 255, 255);
+                    font-size: 1.2em;
                     font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+                    @include respond(tablet){
+                        width: 90%;
+                        margin: 0 auto;
+                    }
                 }
                 .reply_author{
                     margin-top: 25px;
