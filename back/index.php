@@ -20,7 +20,6 @@ if(!isset($_SESSION['user']) || $_SESSION['user']['logged_in_as'] != "admin"){
 <body>
 <div class="container_main">
 <?php include '../header.php';?>
-    Dit Zie je als je ingelogd bent en een admin bent. Aan deze site wordt gewerkt.
     <?php include '../footer.php';?>
 </div>
 </body>

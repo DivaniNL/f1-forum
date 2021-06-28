@@ -33,7 +33,6 @@ if (isset($_POST['register'])) {
     //creating an avatar
     $file = $_FILES["avatar"]["name"];
     $check_ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-    echo $check_ext;
     //if png
     
     if ($check_ext == "png" ||$check_ext == "PNG") {
@@ -100,10 +99,9 @@ if (isset($_POST['register'])) {
                     //if the credentials table is filled, go to the login page.
                     header("Location: login.php");
                 } else {
-                    $error .= "Er is iets misgegaan: Errorcode[12]";
+
                 }
             } else {
-                echo "Er is iets misgegaan: Errorcode[11]";
             }
         } else {
             //if there is already a user with either the same username or email

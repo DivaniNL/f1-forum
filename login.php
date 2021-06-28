@@ -50,9 +50,9 @@ if (isset($_SESSION['user'])) { //if login in session is not set
                 </div>
 
                 <!-- Errors occouring while logining will appear here -->
-                <div class="container_error"><?php echo $error ?> </div>
+                
             </div>
-
+            <div class="container_error"><?php echo $error ?> </div>
             
 
         </div><br><br>
