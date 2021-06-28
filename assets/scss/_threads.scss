@@ -76,6 +76,7 @@
         padding: 5px;
         border-radius: 7px;
         background-image: -webkit-linear-gradient(top, #6ACEFF 0%, #12A3EB 2px, #0076B1 92px, #0076B1 100%);
+
         .threads_header, .thread_container{
             display: flex;
             justify-content: space-between;
@@ -192,6 +193,10 @@
                 }
             }
         }
-        
+        .no_threads{
+            padding: 15px;
+            text-align: center;
+            display: block;
+        }
     }
 }

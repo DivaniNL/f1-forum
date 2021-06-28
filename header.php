@@ -9,7 +9,7 @@
 <div class="container_hdr">
     <ul class="hdr_left">
         <li class='hdr_container_logo'>
-            <img class='hdr_logo' src="assets/img/logo.png" alt="F1-Forum-logo">
+            <a href="index.php"><img class='hdr_logo' src="assets/img/logo.png" alt="F1-Forum-logo"></a>
         </li>
         <li class='hdr_container_text'>
             <h1 class="hdr_txt_h1">F1-Forum</h1>

@@ -7,6 +7,16 @@
 $error = "";
 //registering a user
 if (isset($_POST['register'])) {
+    $post_username = $_POST['username'];
+    $post_firstname = $_POST['firstname'];
+    $post_lastname = $_POST['lastname'];
+    $post_email = $_POST['email'];
+    $post_password = $_POST['password'];
+    $post_favourite_driver = $_POST['favourite_driver'];
+    $post_email_confirm = $_POST['confirm_email'];
+    $post_password_confirm = $_POST['confirm_password'];
+    //creating an avatar
+    $file = $_FILES["avatar"]["name"];
     //preparing the query to fill the users table
     $sql_insert_user = $conn->prepare("INSERT INTO `users`(username, firstname, lastname, avatar, date_registered, `admin`, favourite_driver) VALUES(?,?,?,?,?,?,?)");
     $sql_insert_user->bind_param("sssssis", $post_username, $post_firstname, $post_lastname, $avatar, $date, $var, $post_favourite_driver);
@@ -30,7 +40,7 @@ if (isset($_POST['register'])) {
     echo $check_ext;
     //if png
     
-    if ($check_ext == "png") {
+    if ($check_ext == "png" ||$check_ext == "PNG") {
         $im = imagecreatefrompng($_FILES['avatar']['tmp_name']);
         $size = min(imagesx($im), imagesy($im));
         //this will be optimizeed, the crop
@@ -55,7 +65,6 @@ if (isset($_POST['register'])) {
             imagedestroy($im2);
         }
         imagedestroy($im);
-        echo "hoi jpg of jpeg";
         //placing the avatar name under a variable
         $avatar = "_avatar_".$post_username.".jpg";
     }
@@ -405,20 +414,32 @@ function getThreads($conn, $cat_id, $subcat_id)
     //emptying the threads container div
     $threads_div = "";
     //the outer div for all the threads
-    $threads_div .= "<div class='container_threads_inner'>";
+    
     //preparing query to get all threads from current subcat
     $sql_get_all_threads_from_subcat = $conn->prepare("SELECT *, threads.id as threadId, users.id as userId, subcategories.id as subcatId, categories.id as catId FROM threads INNER JOIN subcategories ON subcategories.id = threads.subcat_id INNER JOIN categories ON categories.id = threads.cat_id INNER JOIN users ON users.id = threads.author_id WHERE threads.subcat_id = ?");
     $sql_get_all_threads_from_subcat->bind_param("i", $subcat_id);
     //get all threads from current subcat
     $sql_get_all_threads_from_subcat->execute();
-    $result_get_all_threads_from_subcat = $sql_get_all_threads_from_subcat->get_result();
+
+    $sql_get_all_threads_from_subcat->store_result();
     //thread header shows a line where the details of the divs will be
-    $threads_div .= "<div class='threads_header'>
+    if ($sql_get_all_threads_from_subcat->num_rows > 0) {
+        $threads_div .= "<div class='container_threads_inner'>";
+        $threads_div .= "<div class='threads_header'>
                 <div class='threads_info_container'>Onderwerpen</div>
                 <div class='threads_replies_container'>Reacties</div>
                 <div class='threads_latest_reply_info_container'>Laatste bericht</div>
             </div>
             <div class='container_threads'>";
+    }else{
+        $threads_div .= "<div class='container_threads_inner'>";
+        $threads_div .= "<div class='threads_header no_threads'>Er zijn nog geen onderwerpen geplaatst onder deze subcategorie</div></div>";
+    }
+    $sql_get_all_threads_from_subcat = $conn->prepare("SELECT *, threads.id as threadId, users.id as userId, subcategories.id as subcatId, categories.id as catId FROM threads INNER JOIN subcategories ON subcategories.id = threads.subcat_id INNER JOIN categories ON categories.id = threads.cat_id INNER JOIN users ON users.id = threads.author_id WHERE threads.subcat_id = ?");
+    $sql_get_all_threads_from_subcat->bind_param("i", $subcat_id);
+    //get all threads from current subcat
+    $sql_get_all_threads_from_subcat->execute();
+    $result_get_all_threads_from_subcat = $sql_get_all_threads_from_subcat->get_result();
     while ($row_get_all_threads_from_subcat = $result_get_all_threads_from_subcat->fetch_assoc()) {
         //preparing query to get user info, reply info and thread infor from most recent reply from every post
         $sql_get_replies_from_thread = $conn->prepare("SELECT *, threads.id as threadId, users.id as userId FROM threads INNER JOIN replies ON replies.thread_id = threads.id INNER JOIN users ON users.id = threads.author_id WHERE threads.id = ? ORDER BY replies.date_time DESC LIMIT 1");
@@ -458,7 +479,20 @@ function getThreads($conn, $cat_id, $subcat_id)
             </div>";
         //sql query to get all the subcategories
     }
-    $threads_div .= "</div></div>";
+        //preparing query to get all threads from current subcat
+        $sql_get_all_threads_from_subcat = $conn->prepare("SELECT *, threads.id as threadId, users.id as userId, subcategories.id as subcatId, categories.id as catId FROM threads INNER JOIN subcategories ON subcategories.id = threads.subcat_id INNER JOIN categories ON categories.id = threads.cat_id INNER JOIN users ON users.id = threads.author_id WHERE threads.subcat_id = ?");
+        $sql_get_all_threads_from_subcat->bind_param("i", $subcat_id);
+        //get all threads from current subcat
+        $sql_get_all_threads_from_subcat->execute();
+    
+        $sql_get_all_threads_from_subcat->store_result();
+    if ($sql_get_all_threads_from_subcat->num_rows > 0) {
+        $threads_div .= "</div></div>";
+    }
+    else{
+        
+    }
+    
     //returning div. Echo this function to see the div
     return $threads_div;
 }
@@ -497,7 +531,7 @@ function getReplies($conn, $cat_id, $subcat_id, $thread_id)
             }else{
                 $avatar = "_avatar_default.png";
             }
-            
+            $avatar_default = "_avatar_default.png";
             $favourite_driver = $row_get_replies_and_user_info_from_db['favourite_driver'];
             $posts_made = $row_get_replies_and_user_info_from_db['threads_count'];
             //post info
@@ -510,7 +544,7 @@ function getReplies($conn, $cat_id, $subcat_id, $thread_id)
                 ///name favourite driver avatar admin posts made
                 $replies_div .= "<div class='user_username'>".$username."</div>";
                 $replies_div .= "<div class='user_favourite_driver'>".$favourite_driver."</div>";         
-                $replies_div .= "<div class='user_avatar_container'><img class='user_avatar' src='assets/avatars/".$avatar."'></div>";
+                $replies_div .= "<div class='user_avatar_container'><img class='user_avatar' onerror='this.onerror=null; this.src=`assets/avatars/".$avatar_default."`' src='assets/avatars/".$avatar."'></div>";
                 if($row_get_replies_and_user_info_from_db['admin'] === 0){
                     $replies_div .= "<div class='user_role'><span class='visitor'>Gebruiker</span></div>";         
                 }elseif ($row_get_replies_and_user_info_from_db['admin'] === 1) {
