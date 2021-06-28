@@ -39,6 +39,10 @@ body{
         @import 'register';
         //container_form_login
         @import 'login';
+        //container_new_thread
+        @import 'new_thread';
+        //container_reply
+        @import 'reply';
         @include respond(mobile) {
             min-width: 0px;
             width: 95%;

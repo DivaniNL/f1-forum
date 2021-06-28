@@ -3,17 +3,7 @@ include '../conn/conn.php';
 include "../handler.php";
 
 //if login in session is  set
-if(isset($_SESSION['user'])){ 
-    //check if the user has admin rights
-    if($_SESSION['user']['logged_in_as'] != "admin"){
-        //if the user does not have admin rights, send it back to the public home page
-        header("Location: ../index.php");
-    }else{
-        //stuff happening if you are visiting this page and have admin access
-        $_SESSION['admin_page'] = 'home';
-    }
-}else{
-    //if the user is not logged in at all, send it straight back to the login page
+if(!isset($_SESSION['user']) || $_SESSION['user']['logged_in_as'] != "admin"){ 
     header("Location: ../index.php");
 }
 

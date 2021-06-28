@@ -1,8 +1,4 @@
 <?php
-// include 'conn/conn.php';
-?>
-
-<?php
 //the error variable stores all the errors and displays it in the div "error-container"
 $error = "";
 //registering a user
@@ -384,7 +380,7 @@ function getCategoryTree($conn)
         <div class='container_category'>
             <div class='category_header'>
                 <div class='cat_title_container'>" . $cat_title . "</div>
-                <div class='subcat_thread_count_head_container'>Onderwerpen</div>
+                <div class='subcat_thread_count_head_container'>Topics</div>
             </div>
             <div class = 'container_subcats'>";
         //preparing query to get all the subcategories
@@ -426,14 +422,14 @@ function getThreads($conn, $cat_id, $subcat_id)
     if ($sql_get_all_threads_from_subcat->num_rows > 0) {
         $threads_div .= "<div class='container_threads_inner'>";
         $threads_div .= "<div class='threads_header'>
-                <div class='threads_info_container'>Onderwerpen</div>
+                <div class='threads_info_container'>Topics</div>
                 <div class='threads_replies_container'>Reacties</div>
                 <div class='threads_latest_reply_info_container'>Laatste bericht</div>
             </div>
             <div class='container_threads'>";
     }else{
         $threads_div .= "<div class='container_threads_inner'>";
-        $threads_div .= "<div class='threads_header no_threads'>Er zijn nog geen onderwerpen geplaatst onder deze subcategorie</div></div>";
+        $threads_div .= "<div class='threads_header no_threads'>Er zijn nog geen topics geplaatst onder deze subcategorie</div></div>";
     }
     $sql_get_all_threads_from_subcat = $conn->prepare("SELECT *, threads.id as threadId, users.id as userId, subcategories.id as subcatId, categories.id as catId FROM threads INNER JOIN subcategories ON subcategories.id = threads.subcat_id INNER JOIN categories ON categories.id = threads.cat_id INNER JOIN users ON users.id = threads.author_id WHERE threads.subcat_id = ?");
     $sql_get_all_threads_from_subcat->bind_param("i", $subcat_id);
@@ -550,7 +546,7 @@ function getReplies($conn, $cat_id, $subcat_id, $thread_id)
                 }elseif ($row_get_replies_and_user_info_from_db['admin'] === 1) {
                     $replies_div .= "<div class='user_role'><span class='admin'>Beheerder</span></div>";         
                 }
-                $replies_div .= "<div class='user_posts_made'>".$posts_made." onderwerpen gestart</div>";
+                $replies_div .= "<div class='user_posts_made'>".$posts_made." Topics gestart</div>";
 
             $replies_div .= "</div>";
             $replies_div .= "<div class='reply_post_body'>";
@@ -633,22 +629,10 @@ function showSubcatHeader($conn, $subcat_id)
     //this function returns the subcategory's title. Echo this function on subcategory.php to see the title of the subcategory
     return $subcat_title;
 }
-
-
-
-
-
-
-// if($_SESSION['user']['logged_in_as'] == "admin"){
-//     //setting the json categories value to blank
-//     $_SESSION['categories'] = [];
-//     //query to get all categories from the database
-// }
 ?>
 
-<style>
-<?php include 'assets/css/style.min.css';?>
-</style>
+
+
 <!-- The script below makes sure a form is not submitted when reloading a page -->
 <script>
 if ( window.history.replaceState ) {

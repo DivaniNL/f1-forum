@@ -1,17 +1,15 @@
 <!-- footer container -->
 <?php
-if(!empty($_POST["send"])) {
-	$name = $_POST["userName"];
-	$email = $_POST["userEmail"];
-	$phone = $_POST["phone"];
+if (!empty($_POST["send"])) {
+    $name = $_POST["userName"];
+    $email = $_POST["userEmail"];
+    $phone = $_POST["phone"];
     $subject = $_POST['subject'];
-	$content = $name." Left you a message:"."\r\n".$_POST["content"].""."\r\n"."His / Her Phone Number is: ".$phone."";
+    $content = $name . " Left you a message:" . "\r\n" . $_POST["content"] . "" . "\r\n" . "His / Her Phone Number is: " . $phone . "";
 
-	$toEmail = "divani.development@gmail.com";
-	$mailHeaders = "From: " . $name . "<". $email .">\r\n";
-	if(mail($toEmail, $subject, $content, $mailHeaders)) {
-	   
-	}
+    $toEmail = "divani.development@gmail.com";
+    $mailHeaders = "From: " . $name . "<" . $email . ">\r\n";
+    if (mail($toEmail, $subject, $content, $mailHeaders)) { }
 }
 ?>
 <br>
@@ -24,8 +22,8 @@ if(!empty($_POST["send"])) {
 
             <form id="ContactMe" action="" method="post">
                 <div class="contact-row column-right">
-                    <label style="padding-top: 20px;">Naam</label> 
-                    <span id="userName-info" class="info"></span><br /> 
+                    <label style="padding-top: 20px;">Naam</label>
+                    <span id="userName-info" class="info"></span><br />
                     <input type="text" name="userName" id="userName" class="contact_me_input_box">
                 </div>
                 <div class="contact-row column-right">
@@ -39,13 +37,13 @@ if(!empty($_POST["send"])) {
 
                 <div>
                     <label>Onderwerp</label> <span id="subject-info" class="info"></span><br />
-                    <input type="text" name="subject" id="subject" class="contact_me_input_box">                </div>
+                    <input type="text" name="subject" id="subject" class="contact_me_input_box"> </div>
                 <div>
                     <label>Bericht</label> <span id="content-info" class="info"></span><br />
                     <textarea name="content" id="content" class="contact_me_input_box" rows="3"></textarea>
                 </div>
                 <div class='submit'>
-                    <button type="submit" name="send" value="Send" class="button_submit" >Send</button>
+                    <button type="submit" name="send" value="Send" class="button_submit">Send</button>
                 </div>
             </form>
             <div id="loader-icon" style="display: none;">
@@ -55,7 +53,7 @@ if(!empty($_POST["send"])) {
     </div>
 </div>
 <script>
-if ( window.history.replaceState ) {
-  window.history.replaceState( null, null, window.location.href );
-}
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
 </script>
