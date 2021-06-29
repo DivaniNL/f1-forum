@@ -22,7 +22,7 @@ if (isset($_SESSION['user'])) { //if login in session is not set
         <?php include 'header.php'; ?>
         <div class="container_login">
             <div class="container_login_header">
-                <h2>Log hier</h2>
+                <h2>Log hier In</h2>
             </div>
             <div class="login">
                 <!-- login form container -->
