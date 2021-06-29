@@ -153,6 +153,9 @@
                             font-size: 16px;
                             font-weight: 500;
                             font-family: "Trebuchet MS",Helvetica,Arial,Sans-serif;
+                            &:hover {
+                                color: #d31141;
+                            }
                         }
                         .author_date_time{
                             font-size: 1em;
@@ -174,6 +177,9 @@
                         display: none;
                     }
                     
+                }
+                &:hover {
+                    background-color: #f6f4d0;
                 }
                 .thread_latest_reply_info_container{
                     color: #4C5D77;
