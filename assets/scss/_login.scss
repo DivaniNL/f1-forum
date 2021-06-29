@@ -98,9 +98,9 @@
                     }
                     button.button_register_prompt{
                         @include respond(mobile){
-                            font-size: 10px;
+                            font-size: 9px;
                             a{
-                                line-height: initial;
+                               
                             }
                         }
                     }
