@@ -392,7 +392,7 @@ function getCategoryTree($conn)
             //place a div inside the category for each subcategory
             $cat_div .= "
             <div class = 'container_subcat'>
-                <div class = 'subcat_title_container'><div class = 'subcat_read_img_container'><img src='http://localhost/f1-forum/assets/img/forum_read.png'></div><a class='subcat_link' href= 'subcategory.php?cat=" . $row_get_categories_from_db['id'] . "&subcat=" . $row_get_subcategories_from_db['id'] . "'>" . $row_get_subcategories_from_db['subcat_title'] . "</a></div>
+                <div class = 'subcat_title_container'><div class = 'subcat_read_img_container'><img src='https://www.f1-forum.nl/assets/img/forum_read.png'></div><a class='subcat_link' href= 'subcategory.php?cat=" . $row_get_categories_from_db['id'] . "&subcat=" . $row_get_subcategories_from_db['id'] . "'>" . $row_get_subcategories_from_db['subcat_title'] . "</a></div>
                 <div class = 'subcat_thread_count_container'>" . $row_get_subcategories_from_db['subcat_threads_count'] . "</div>
             </div>";
         }
@@ -458,7 +458,7 @@ function getThreads($conn, $cat_id, $subcat_id)
             
                 <div class='thread_info_container'>
                     <div class = 'thread_img_container'>
-                        <img src='http://localhost/f1-forum/assets/img/forum_read.png'>
+                        <img src='https://www.f1-forum.nl/assets/img/forum_read.png'>
                     </div>
                     <div class='thread_info'>
                         <a class='thread_link' href='thread.php?thread=" . $thread_id . "&cat=" . $cat_id . "&subcat=". $subcat_id . "'>" . $thread_title . "</a><br>

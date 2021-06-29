@@ -22,7 +22,12 @@ if(!isset($_SESSION['user']) || $_SESSION['user']['logged_in_as'] != "admin"){
 </head>
 <body>
 <div class="container_main">
-<?php include '../header.php';?>
+<?php include 'header.php';?>
+<div class="container_admin_index">
+    <div class="link_admin"><a href="addcat.php">Categorie Toevoegen</a></div>
+    <div class="link_admin"><a href="addsubcat.php">Subcategorie Toevoegen</a></div>
+
+</div>
     <?php include '../footer.php';?>
 </div>
 </body>

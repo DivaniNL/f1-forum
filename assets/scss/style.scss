@@ -43,6 +43,12 @@ body{
         @import 'new_thread';
         //container_reply
         @import 'reply';
+        //container_Admin_index
+        @import 'admin_index';
+        //container_addcat
+        @import 'admin_addcat';
+        //container_addsubcat
+        @import 'admin_addsubcat';
         @include respond(mobile) {
             min-width: 0px;
             width: 95%;

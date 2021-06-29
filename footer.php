@@ -47,7 +47,6 @@ if (!empty($_POST["send"])) {
                 </div>
             </form>
             <div id="loader-icon" style="display: none;">
-                <img src="LoaderIcon.gif" />
             </div>
         </div>
     </div>
