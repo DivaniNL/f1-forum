@@ -5,7 +5,7 @@
     <title>F1-Forum</title>
     <link rel="icon" 
       type="image/png" 
-      href="/assets/img/logo.png" />
+      href="https://f1-forum.nl/assets/img/logo.png" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <style><?php include 'assets/css/style.min.css';?></style>
