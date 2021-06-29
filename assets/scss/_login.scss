@@ -96,6 +96,15 @@
                             text-decoration: none;
                         }
                     }
+                    button.button_register_prompt{
+                        @include respond(mobile){
+                            font-size: 10px;
+                            a{
+                                line-height: initial;
+                            }
+                        }
+                    }
+                    
                 }
                 .column-right{
                     margin-right: 0.5%;
