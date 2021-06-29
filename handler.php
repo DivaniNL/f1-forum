@@ -32,38 +32,18 @@ if (isset($_POST['register'])) {
     $post_password_confirm = $_POST['confirm_password'];
     //creating an avatar
     $file = $_FILES["avatar"]["name"];
+    $file_tmp = $_FILES['avatar']['tmp_name'];
     $check_ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
     //if png
-    
-    if ($check_ext == "png" ||$check_ext == "PNG") {
-        $im = imagecreatefrompng($_FILES['avatar']['tmp_name']);
-        $size = min(imagesx($im), imagesy($im));
-        //this will be optimizeed, the crop
-        $im2 = imagecrop($im, ['x' => 0, 'y' => 0, 'width' => $size, 'height' => $size]);
-        if ($im2 !== false) {
-            //place the avatar in the folder
-            imagepng($im2, "assets/avatars/_avatar_".$post_username.".png");
-            imagedestroy($im2);
-        }
-        imagedestroy($im);
+    $avatar = "_avatar_".$post_username.".png";
+    $target_dir = "assets/avatars/";
+    $target_file = $target_dir . "_avatar_".$post_username.".png";
+    $im = imagecreatefromstring(file_get_contents($_FILES['avatar']['tmp_name']));
+    $size = min(imagesx($im), imagesy($im));
+    //this will be optimizeed, the crop
+    $croppedImage = cropAlign($im, $size, $size, 'center', 'middle');
+    imagepng($croppedImage, $target_file);
         
-        //placing the avatar name under a variable
-        $avatar = "_avatar_".$post_username.".png";
-    } elseif ($check_ext == "jpg" ||$check_ext == "jpeg") {
-        $im = imagecreatefromjpeg($_FILES['avatar']['tmp_name']);
-        $size = min(imagesx($im), imagesy($im));
-        //this will be optimizeed, the crop
-        $im2 = imagecrop($im, ['x' => 0, 'y' => 0, 'width' => $size, 'height' => $size]);
-        if ($im2 !== false) {
-            //place the avatar in the folder
-            imagejpeg($im2, "assets/avatars/_avatar_".$post_username.".jpg");
-            imagedestroy($im2);
-        }
-        imagedestroy($im);
-        //placing the avatar name under a variable
-        $avatar = "_avatar_".$post_username.".jpg";
-    }
-    
     //saves current date for date_registered column in the users table
     $date = date('Y-m-d');
 
@@ -626,6 +606,36 @@ function showSubcatHeader($conn, $subcat_id)
     $subcat_title = $row_get_categories_from_db['subcat_title'];
     //this function returns the subcategory's title. Echo this function on subcategory.php to see the title of the subcategory
     return $subcat_title;
+}
+function cropAlign($image, $cropWidth, $cropHeight, $horizontalAlign = 'center', $verticalAlign = 'middle') {
+    $width = imagesx($image);
+    $height = imagesy($image);
+    $horizontalAlignPixels = calculatePixelsForAlign($width, $cropWidth, $horizontalAlign);
+    $verticalAlignPixels = calculatePixelsForAlign($height, $cropHeight, $verticalAlign);
+    return imageCrop($image, [
+        'x' => $horizontalAlignPixels[0],
+        'y' => $verticalAlignPixels[0],
+        'width' => $horizontalAlignPixels[1],
+        'height' => $verticalAlignPixels[1]
+    ]);
+}
+
+function calculatePixelsForAlign($imageSize, $cropSize, $align) {
+    switch ($align) {
+        case 'left':
+        case 'top':
+            return [0, min($cropSize, $imageSize)];
+        case 'right':
+        case 'bottom':
+            return [max(0, $imageSize - $cropSize), min($cropSize, $imageSize)];
+        case 'center':
+        case 'middle':
+            return [
+                max(0, floor(($imageSize / 2) - ($cropSize / 2))),
+                min($cropSize, $imageSize),
+            ];
+        default: return [0, $imageSize];
+    }
 }
 ?>
 
