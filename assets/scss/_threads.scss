@@ -197,8 +197,9 @@
             padding: 15px;
             text-align: center;
             display: block;
+            font-family: 'Josefin Sans', sans-serif;
             @include respond(mobile){
-                font-size: 12px;
+                font-size: 15px;
             }
         }
     }
