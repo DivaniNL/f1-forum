@@ -16,6 +16,9 @@ if(!isset($_SESSION['user']) || $_SESSION['user']['logged_in_as'] != "admin"){
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>F1-Forum - Ontwikkelaarsomgeving</title>
+    <link rel="icon" 
+      type="image/png" 
+      href="https://f1-forum.nl/assets/img/logo.png" />
 </head>
 <body>
 <div class="container_main">

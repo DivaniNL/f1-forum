@@ -14,6 +14,10 @@ if (isset($_SESSION['user'])) { //if login in session is not set
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inloggen - F1-Forum.nl</title>
+    <link rel="icon" 
+      type="image/png" 
+      href="https://f1-forum.nl/assets/img/logo.png" />
+
 </head>
 
 <body>

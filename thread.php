@@ -22,6 +22,9 @@ if(isset($_GET['thread'])){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>F1-Forum - <?php echo showThreadHeader($conn, $cat_id, $subcat_id, $thread_id) ?> </title>
     <!-- Hier komt nog get thread title in title -->
+    <link rel="icon" 
+      type="image/png" 
+      href="https://f1-forum.nl/assets/img/logo.png" />
     
 </head>
 <body>
