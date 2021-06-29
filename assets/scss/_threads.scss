@@ -197,6 +197,9 @@
             padding: 15px;
             text-align: center;
             display: block;
+            @include respond(mobile){
+                font-size: 12px;
+            }
         }
     }
 }
